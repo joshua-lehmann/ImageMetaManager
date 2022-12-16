@@ -1,0 +1,9 @@
+@startuml useCaseDiagram
+'https://plantuml.com/use-case-diagram
+
+:User:
+
+User --> (Album Erstellen)
+User --> (Bilder uploaden)
+
+@enduml
