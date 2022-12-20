@@ -1,5 +1,6 @@
 ### Project files ###
 /src/main/resources/application-pwd.yml
+/logs
 
 target/
 !.mvn/wrapper/maven-wrapper.jar
