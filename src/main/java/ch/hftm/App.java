@@ -5,19 +5,21 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 
 /**
  * JavaFX App
  */
+@Slf4j
 public class App extends Application {
-
     private static Scene scene;
 
     @Override
     public void start(Stage stage) throws IOException {
         scene = new Scene(loadFXML("primary"), 640, 480);
+        log.debug("Opening first scene");
         stage.setScene(scene);
         stage.show();
     }
@@ -32,6 +34,7 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
+        log.info("Starting the App");
         launch();
     }
 
