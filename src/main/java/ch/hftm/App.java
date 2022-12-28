@@ -37,7 +37,7 @@ public class App extends Application {
     public static void main(String[] args) throws IOException {
         log.info("Starting the App");
         AlbumService albumService = new AlbumService();
-        albumService.createAlbum();
+        albumService.createAlbum("HolidayAlbum", "This contains all photos from the last vacation");
         launch();
     }
 

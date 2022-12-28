@@ -10,12 +10,12 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 public class AlbumService {
-    public void createAlbum() throws IOException {
+    public void createAlbum(String name, String description) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
         DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm");
         objectMapper.setDateFormat(df);
-        Album album = new Album("Holiday Photos", "Album with all pictures from the holidays");
+        Album album = new Album(name, description);
         objectMapper.writeValue(new File("storage/albums.json"), album);
 
     }
