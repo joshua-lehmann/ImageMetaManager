@@ -17,6 +17,5 @@ public class AlbumService {
         objectMapper.setDateFormat(df);
         Album album = new Album(name, description);
         objectMapper.writeValue(new File("storage/albums.json"), album);
-
     }
 }
