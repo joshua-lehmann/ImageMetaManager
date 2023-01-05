@@ -35,6 +35,14 @@ Der User kann ein neues Bild uploaden, es wird dann in einem Album angezeigt und
 ### Bild loeschen
 Der User kann ein Bild loeschen. Dadurch wird es aus dem Album entfernt und aus der JSON Datenbank. Auf dem Dateisystem bleibt das Bild weiterhin bestehen.
 
+## Metadaten
+### Metadaten anzeigen 
+Der User kann für ein bestimmtes Bild die Metadaten anzeigen. Es soll in eine Art "Key Value" Pair angezeigt werden, wobei der Key der Eigenschaftsname ist und der Value der Wert der Eigenschaft.
+### Metadaten bearbeiten
+Der User kann bestimmte (aber nicht alle) Metadaten Eigenschaften bearbeiten und deren Wert updaten über das GUI.
+### Metadaten speichern
+Der Usser kann die geänderten Werte bestätigen und speichern. Diese werden dann in der Bilddatei direkt in den exif Attributen abgespeichert.
+
 ## Statusbar
 ### Statusbar anzeigen
 Das System muss in jedem Screen eine Statusbar anzeigen, welche relevante Informationen zum aktuellen Screen beinhaltet. Beispielsweise anzahl Bilder oder Notifications wie "Änderungen gespeichert" etc.
