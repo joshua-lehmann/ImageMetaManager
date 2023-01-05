@@ -1,17 +1,21 @@
 # Use Case Diagram
 
 <!-- TOC -->
-* [Use Case Diagram](#use-case-diagram)
+- [Use Case Diagram](#use-case-diagram)
   * [Einleitung](#einleitung)
   * [Album](#album)
-    * [Album erstellen](#album-erstellen)
-    * [Album löschen](#album-löschen)
-    * [Album anzeigen](#album-anzeigen)
+    + [Album erstellen](#album-erstellen)
+    + [Album löschen](#album-löschen)
+    + [Album anzeigen](#album-anzeigen)
   * [Bilder](#bilder)
-    * [Bilder uploaden](#bilder-uploaden)
-    * [Bild loeschen](#bild-loeschen)
+    + [Bilder uploaden](#bilder-uploaden)
+    + [Bild loeschen](#bild-loeschen)
+  * [Metadaten](#metadaten)
+    + [Metadaten anzeigen](#metadaten-anzeigen)
+    + [Metadaten bearbeiten](#metadaten-bearbeiten)
+    + [Metadaten speichern](#metadaten-speichern)
   * [Statusbar](#statusbar)
-    * [Statusbar anzeigen](#statusbar-anzeigen)
+    + [Statusbar anzeigen](#statusbar-anzeigen)
 <!-- TOC -->
 
 ## Einleitung
