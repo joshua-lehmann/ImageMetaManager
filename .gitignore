@@ -23,5 +23,6 @@ target/
 
 ### VS Code ###
 .vscode/
+/.vscode/
 
 

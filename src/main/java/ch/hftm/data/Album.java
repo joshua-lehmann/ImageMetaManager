@@ -1,24 +1,27 @@
 package ch.hftm.data;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Data
+@NoArgsConstructor
 public class Album {
     private String id;
-    private final String name;
-    private final String description;
+    private String name;
+    private String description;
     private Date createdAt = new Date();
 
-    @JsonGetter("id")
-    public String getId() {
-        DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+
+    public Album(String name, String description) {
+        this.name = name;
+        this.description = description;
+        DateFormat df = new SimpleDateFormat("dd.MM.yyyy-HH:mm");
         String generatedId = name + "_" + df.format(createdAt);
-        // removing all blanks from the generated ID
-        return generatedId.replaceAll("\\s", "");
+        this.id = generatedId;
     }
+
 }
