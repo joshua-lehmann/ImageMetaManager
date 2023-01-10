@@ -1,4 +1,4 @@
-package ch.hftm;
+package ch.hftm.controllers;
 
 public class PrimaryController {
 
