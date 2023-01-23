@@ -1,6 +1,7 @@
 package ch.hftm.data;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.text.DateFormat;
@@ -9,6 +10,7 @@ import java.util.Date;
 
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(of = "id")
 public class Album {
     private String id;
     private String name;
