@@ -78,4 +78,11 @@ class ImageServiceTest {
         assertEquals("DSCN0012.jpg", image.getFileName());
         assertEquals("jpg", image.getFileExtension());
     }
+
+    @Test
+    @Order(5)
+    void getImageByFileNameNotFound() {
+        Image image = imageService.getImageByFileName("testxyz.jpg");
+        assertEquals(null, image);
+    }
 }

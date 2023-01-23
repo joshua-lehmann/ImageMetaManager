@@ -52,4 +52,11 @@ class AlbumServiceTest {
         assertEquals("Vacation", deletedAlbum.getName());
         assertEquals(0, albumService.getAllAlbums().size());
     }
+
+    @Test
+    @Order(3)
+    void getAlbumByNameNotFound() {
+        Album deletedAlbum = albumService.getAlbumByName("xyz");
+        assertEquals(null, deletedAlbum);
+    }
 }
