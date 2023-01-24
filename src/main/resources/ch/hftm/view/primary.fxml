@@ -1,23 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.geometry.Rectangle2D?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
-
+<?import javafx.scene.layout.*?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.hftm.controllers.PrimaryController">
     <children>
         <BorderPane prefHeight="800.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -26,35 +12,7 @@
                     <tabs>
                         <Tab text="Bibliothek">
                             <content>
-                                <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                                    <children>
-                                        <BorderPane prefHeight="691.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                            <center>
-                                                <ScrollPane fx:id="scrollPaneLibrary" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                                                    <content>
-                                                        <AnchorPane fx:id="anchorPaneLibrary" minHeight="0.0" minWidth="0.0" />
-                                                    </content>
-                                                </ScrollPane>
-                                            </center>
-                                            <top>
-                                                <FlowPane prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                                                    <children>
-                                                        <Button mnemonicParsing="false" text="Löschen">
-                                                            <FlowPane.margin>
-                                                                <Insets left="700.0" top="37.5" />
-                                                            </FlowPane.margin>
-                                                        </Button>
-                                                        <Button mnemonicParsing="false" text="Export">
-                                                            <FlowPane.margin>
-                                                                <Insets left="50.0" top="37.5" />
-                                                            </FlowPane.margin>
-                                                        </Button>
-                                                    </children>
-                                                </FlowPane>
-                                            </top>
-                                        </BorderPane>
-                                    </children>
-                                </AnchorPane>
+                                <fx:include fx:id="albumTabPage" source="album.fxml"/>
                             </content>
                         </Tab>
                         <Tab text="Album">
@@ -69,22 +27,6 @@
                                                     </content>
                                                 </ScrollPane>
                                             </center>
-                                            <top>
-                                                <FlowPane prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                                                    <children>
-                                                        <Button mnemonicParsing="false" text="Löschen">
-                                                            <FlowPane.margin>
-                                                                <Insets left="700.0" top="37.5" />
-                                                            </FlowPane.margin>
-                                                        </Button>
-                                                        <Button mnemonicParsing="false" text="Export">
-                                                            <FlowPane.margin>
-                                                                <Insets left="50.0" top="37.5" />
-                                                            </FlowPane.margin>
-                                                        </Button>
-                                                    </children>
-                                                </FlowPane>
-                                            </top>
                                         </BorderPane>
                                     </children>
                                 </AnchorPane>
