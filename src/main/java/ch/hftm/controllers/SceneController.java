@@ -15,8 +15,8 @@ public class SceneController {
     private Scene scene;
     private Parent root;
 
-    public void changeScene(ActionEvent event) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/album.fxml"));
+    public void changeScene(ActionEvent event, String sceneName) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(String.format("view/%s.fxml", sceneName)));
         root = fxmlLoader.load();
 
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

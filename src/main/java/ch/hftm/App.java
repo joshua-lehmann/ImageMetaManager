@@ -1,6 +1,8 @@
 package ch.hftm;
 
+import ch.hftm.data.Album;
 import ch.hftm.service.AlbumService;
+import ch.hftm.service.ImageService;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -8,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -37,7 +40,11 @@ public class App extends Application {
     public static void main(String[] args) {
         log.info("Starting the App");
         AlbumService albumService = new AlbumService();
-        albumService.createAlbum("Main Vacation", "Vacation Album");
+        ImageService imageService = new ImageService();
+        Album album = albumService.createAlbum("Main Vacation", "Vacation Album");
+        imageService.createImage(new File("src/test/resources/DSCN0010.jpg"), album);
+        Album album2 = albumService.createAlbum("Test Album", "Test Album");
+        imageService.createImage(new File("src/test/resources/DSCN0021.jpg"), album2);
         launch();
     }
 
