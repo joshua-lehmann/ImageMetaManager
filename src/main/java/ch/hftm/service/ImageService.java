@@ -96,7 +96,8 @@ public class ImageService {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
         try {
-            objectMapper.writeValue(new File(STORAGE_IMAGES_JSON), newImages);
+            File storageFile = new File(STORAGE_IMAGES_JSON);
+            objectMapper.writeValue(storageFile, newImages);
         } catch (Exception e) {
             log.error("Could not write images to file: {} {}", STORAGE_IMAGES_JSON, e.getMessage());
         }

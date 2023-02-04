@@ -23,6 +23,7 @@ class AlbumServiceTest {
     @BeforeAll
 
     static void setup() {
+        System.setProperty("images-json", "src/test/resources/storage/images.json");
         System.setProperty("albums-json", "src/test/resources/storage/albums.json");
         try {
             Files.deleteIfExists(Path.of("src/test/resources/storage/images.json"));
@@ -32,8 +33,16 @@ class AlbumServiceTest {
         }
     }
 
+
     @Test
     @Order(1)
+    void createTestData() {
+        albumService.createTestData();
+        assertEquals(2, albumService.getAllAlbums().size());
+    }
+
+    @Test
+    @Order(2)
     void createAlbum() throws IOException {
 
         Album testAlbum = new Album("Vacation", "Vacation Album");
@@ -46,15 +55,15 @@ class AlbumServiceTest {
     }
 
     @Test
-    @Order(2)
+    @Order(3)
     void deleteAlbum() {
         Album deletedAlbum = albumService.deleteAlbum(albumService.getAlbumByName("Vacation"));
         assertEquals("Vacation", deletedAlbum.getName());
-        assertEquals(0, albumService.getAllAlbums().size());
+        assertEquals(2, albumService.getAllAlbums().size());
     }
 
     @Test
-    @Order(3)
+    @Order(4)
     void getAlbumByNameNotFound() {
         Album deletedAlbum = albumService.getAlbumByName("xyz");
         assertEquals(null, deletedAlbum);
