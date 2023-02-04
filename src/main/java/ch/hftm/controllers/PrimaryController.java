@@ -4,13 +4,14 @@ import ch.hftm.data.Album;
 import ch.hftm.data.Image;
 import ch.hftm.service.AlbumService;
 import ch.hftm.service.ImageService;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -38,22 +39,18 @@ public class PrimaryController implements Initializable {
     private GridPane albumGrid;
 
 
-    public PrimaryController() {
-    }
-
-    public void onAlbumClick(ActionEvent event) throws IOException {
+    public void onAlbumClick(MouseEvent event) throws IOException {
+        AlbumService albumService = new AlbumService();
+        var source = (Node) event.getSource();
+        Label titleLabel = (Label) source.lookup("#albumTitle");
+        Album album = albumService.getAlbumByName(titleLabel.getText());
         SceneController sceneController = new SceneController();
-        sceneController.changeScene(event, "album");
+        sceneController.changeScene(event, "album", album);
     }
 
-    // Test for adding a Button
-//    public void addButton() {
-//        anchorPaneLibrary.getChildren().add(new Button("Test"));
-//    }
 
     public Pane createAlbumPane(Album album, Pane samplePane) {
         ImageService imageService = new ImageService();
-
         Label sampleTitleLabel = (Label) samplePane.lookup("#albumTitle");
         Label albumTitle = new Label(album.getName());
         albumTitle.setLayoutX(sampleTitleLabel.getLayoutX());
@@ -62,9 +59,11 @@ public class PrimaryController implements Initializable {
         albumTitle.setTextAlignment(sampleTitleLabel.getTextAlignment());
         albumTitle.setContentDisplay(sampleTitleLabel.getContentDisplay());
         albumTitle.setPrefWidth(sampleTitleLabel.getPrefWidth());
+        albumTitle.setId(sampleTitleLabel.getId());
 
         Label sampleIdLabel = (Label) samplePane.lookup("#albumId");
         Label albumId = new Label(album.getId());
+        albumId.setId(sampleIdLabel.getId());
         albumId.setVisible(false);
 
         Image coverImage = imageService.getImagesForAlbum(album).get(0);
@@ -72,13 +71,13 @@ public class PrimaryController implements Initializable {
         Pane albumPane = new Pane();
         albumPane.setPrefHeight(samplePane.getPrefHeight());
         albumPane.setPrefWidth(samplePane.getPrefWidth());
+        albumPane.setOnMouseClicked(samplePane.getOnMouseClicked());
 
         ImageView sampleImageView = (ImageView) samplePane.lookup("#albumImage");
 
         ImageView albumImageView = new ImageView();
         albumImageView.setFitHeight(sampleImageView.getFitHeight());
         albumImageView.setFitWidth(sampleImageView.getFitWidth());
-//        albumImageView.setPreserveRatio(true);
         albumImageView.setPickOnBounds(true);
 
         javafx.scene.image.Image fxImage = new javafx.scene.image.Image(new File(coverImage.getFullPath()).toURI().toString());
@@ -93,9 +92,7 @@ public class PrimaryController implements Initializable {
     @FXML
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-//        addButton();
         AlbumService albumService = new AlbumService();
-        ImageService imageService = new ImageService();
         List<Album> albums = albumService.getAllAlbums();
 
         int row = 0;

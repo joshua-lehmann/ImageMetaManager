@@ -27,3 +27,4 @@ target/
 /.vscode/
 
 
+/src/test/resources/storage/

@@ -3,12 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
-
+<?import javafx.scene.layout.*?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.hftm.controllers.PrimaryController">
    <children>
       <Pane layoutY="1.0" prefHeight="800.0" prefWidth="1000.0" />
@@ -30,11 +25,13 @@
             <Insets />
          </opaqueInsets>
          <children>
-            <Pane fx:id="albumContainer" prefHeight="200.0" prefWidth="200.0">
+            <Pane fx:id="albumContainer" onMouseClicked="#onAlbumClick" prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <ImageView fx:id="albumImage" fitHeight="122.0" fitWidth="243.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true" />
-                  <Label fx:id="albumTitle" alignment="CENTER" contentDisplay="CENTER" layoutX="-1.0" layoutY="120.0" prefHeight="17.0" prefWidth="243.0" text="Title" textAlignment="CENTER" />
-                  <Label fx:id="albumId" layoutX="201.0" layoutY="14.0" text="ID" visible="false" />
+                  <ImageView fx:id="albumImage" fitHeight="122.0" fitWidth="243.0" layoutY="-2.0" pickOnBounds="true"
+                             preserveRatio="true"/>
+                  <Label fx:id="albumTitle" alignment="CENTER" contentDisplay="CENTER" layoutX="-1.0" layoutY="120.0"
+                         prefHeight="17.0" prefWidth="243.0" text="Title" textAlignment="CENTER"/>
+                  <Label fx:id="albumId" layoutX="201.0" layoutY="14.0" text="ID" visible="false"/>
                </children>
             </Pane>
          </children>
