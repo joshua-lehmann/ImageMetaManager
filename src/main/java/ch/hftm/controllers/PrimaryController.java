@@ -51,18 +51,40 @@ public class PrimaryController implements Initializable {
 //        anchorPaneLibrary.getChildren().add(new Button("Test"));
 //    }
 
-    public Pane createAlbumPane(Album album) {
+    public Pane createAlbumPane(Album album, Pane samplePane) {
         ImageService imageService = new ImageService();
-        Pane albumPane = new Pane();
+
+        Label sampleTitleLabel = (Label) samplePane.lookup("#albumTitle");
         Label albumTitle = new Label(album.getName());
+        albumTitle.setLayoutX(sampleTitleLabel.getLayoutX());
+        albumTitle.setLayoutY(sampleTitleLabel.getLayoutY());
+        albumTitle.setAlignment(sampleTitleLabel.getAlignment());
+        albumTitle.setTextAlignment(sampleTitleLabel.getTextAlignment());
+        albumTitle.setContentDisplay(sampleTitleLabel.getContentDisplay());
+        albumTitle.setPrefWidth(sampleTitleLabel.getPrefWidth());
+
+        Label sampleIdLabel = (Label) samplePane.lookup("#albumId");
         Label albumId = new Label(album.getId());
-        ImageView albumImage = new ImageView();
-        albumImage.setFitWidth(499);
-        albumImage.setFitHeight(399);
-        Image image = imageService.getImagesForAlbum(album).get(0);
-        javafx.scene.image.Image fxImage = new javafx.scene.image.Image(new File(image.getFullPath()).toURI().toString());
-        albumImage.setImage(fxImage);
-        albumPane.getChildren().add(albumImage);
+        albumId.setVisible(false);
+
+        Image coverImage = imageService.getImagesForAlbum(album).get(0);
+
+        Pane albumPane = new Pane();
+        albumPane.setPrefHeight(samplePane.getPrefHeight());
+        albumPane.setPrefWidth(samplePane.getPrefWidth());
+
+        ImageView sampleImageView = (ImageView) samplePane.lookup("#albumImage");
+
+        ImageView albumImageView = new ImageView();
+        albumImageView.setFitHeight(sampleImageView.getFitHeight());
+        albumImageView.setFitWidth(sampleImageView.getFitWidth());
+//        albumImageView.setPreserveRatio(true);
+        albumImageView.setPickOnBounds(true);
+
+        javafx.scene.image.Image fxImage = new javafx.scene.image.Image(new File(coverImage.getFullPath()).toURI().toString());
+        albumImageView.setImage(fxImage);
+        sampleImageView.setImage(fxImage);
+        albumPane.getChildren().add(albumImageView);
         albumPane.getChildren().add(albumTitle);
         albumPane.getChildren().add(albumId);
         return albumPane;
@@ -75,9 +97,10 @@ public class PrimaryController implements Initializable {
         AlbumService albumService = new AlbumService();
         ImageService imageService = new ImageService();
         List<Album> albums = albumService.getAllAlbums();
+
         int row = 0;
         for (Album album : albums) {
-            albumGrid.add(createAlbumPane(album), 0, row);
+            albumGrid.add(createAlbumPane(album, albumContainer), 1, row);
             row++;
         }
     }

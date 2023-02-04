@@ -39,12 +39,12 @@ public class App extends Application {
 
     public static void main(String[] args) {
         log.info("Starting the App");
-        AlbumService albumService = new AlbumService();
-        ImageService imageService = new ImageService();
-        Album album = albumService.createAlbum("Main Vacation", "Vacation Album");
-        imageService.createImage(new File("src/test/resources/DSCN0010.jpg"), album);
-        Album album2 = albumService.createAlbum("Test Album", "Test Album");
-        imageService.createImage(new File("src/test/resources/DSCN0021.jpg"), album2);
+//        AlbumService albumService = new AlbumService();
+//        ImageService imageService = new ImageService();
+//        Album album = albumService.createAlbum("Main Vacation", "Vacation Album");
+//        imageService.createImage(new File("src/test/resources/DSCN0010.jpg"), album);
+//        Album album2 = albumService.createAlbum("Test Album", "Test Album");
+//        imageService.createImage(new File("src/test/resources/DSCN0021.jpg"), album2);
         launch();
     }
 
