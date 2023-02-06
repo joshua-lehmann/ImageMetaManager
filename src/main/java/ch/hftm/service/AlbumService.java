@@ -83,6 +83,18 @@ public class AlbumService {
         return null;
     }
 
+    public void createTestData() {
+        if (!getAllAlbums().isEmpty()) {
+            return;
+        }
+        ImageService imageService = new ImageService();
+        Album album = createAlbum("Vacation", "Vacation Album");
+        imageService.createImage(new File("src/test/resources/DSCN0010.jpg"), album);
+        Album album2 = createAlbum("Test Album", "Test Album");
+        imageService.createImage(new File("src/test/resources/DSCN0021.jpg"), album2);
+        imageService.createImage(new File("src/test/resources/DSCN0012.jpg"), album2);
+    }
+
     private void writeAlbumsToJson(List<Album> existingAlbums) {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);

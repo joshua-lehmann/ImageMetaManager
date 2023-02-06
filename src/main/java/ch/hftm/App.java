@@ -37,8 +37,9 @@ public class App extends Application {
     public static void main(String[] args) {
         log.info("Starting the App");
         AlbumService albumService = new AlbumService();
-        albumService.createAlbum("Main Vacation", "Vacation Album");
+        albumService.createTestData();
         launch();
     }
+
 
 }
