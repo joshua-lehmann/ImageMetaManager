@@ -58,14 +58,6 @@
                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
-                                 <children>
-                                    <Label text="Attr 1" />
-                                    <Label text="Attr2" GridPane.rowIndex="1" />
-                                    <Label text="Attr 3" GridPane.rowIndex="2" />
-                                    <Label fx:id="metaLabel1" text="Value 1" GridPane.columnIndex="1" />
-                                    <Label fx:id="metaLabel2" text="Value 2" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                    <Label fx:id="metaLabel3" text="Value 3" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                 </children>
                                  <BorderPane.margin>
                                     <Insets left="10.0" right="10.0" />
                                  </BorderPane.margin>
