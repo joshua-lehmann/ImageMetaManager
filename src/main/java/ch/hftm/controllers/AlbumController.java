@@ -1,16 +1,13 @@
 package ch.hftm.controllers;
 
 import java.io.File;
-import java.net.URL;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import ch.hftm.data.Album;
 import ch.hftm.data.Image;
 import ch.hftm.service.ImageService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
