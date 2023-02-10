@@ -28,6 +28,7 @@ public class AlbumController {
 
     @FXML
     private Label albumStatus;
+    // TODO: Add status updates
 
     @FXML
     private GridPane imageGrid;
@@ -45,7 +46,6 @@ public class AlbumController {
             return;
         }
         albumTitle.setText("Album: " + album.getName());
-        // TODO: Get all images of album and display them nicely in a grid
         initializeAlbum();
     }
 
@@ -64,14 +64,13 @@ public class AlbumController {
         javafx.scene.image.Image fxImage = new javafx.scene.image.Image(new File(image.getFullPath()).toURI().toString());
         imageView.setImage(fxImage);
 
-        GridPane sampleMetaPane = (GridPane) samplePane.lookup("#imageMetaGrid");
         GridPane imageMetaPane = new GridPane();
-        imageMetaPane.setAlignment(sampleMetaPane.getAlignment());
-        imageMetaPane.setLayoutX(sampleMetaPane.getLayoutX());
-        imageMetaPane.setLayoutY(sampleMetaPane.getLayoutY());
-        imageMetaPane.setPrefHeight(sampleMetaPane.getPrefHeight());
-        imageMetaPane.setPrefWidth(sampleMetaPane.getPrefWidth());
-        // TODO: Fix column width of imageMetaPane
+        ColumnConstraints col1 = new ColumnConstraints();
+        col1.setPercentWidth(35.0);
+        ColumnConstraints col2 = new ColumnConstraints();
+        col2.setPercentWidth(65.0);
+        imageMetaPane.getColumnConstraints().add(col1);
+        imageMetaPane.getColumnConstraints().add(col1);
 
         // Add an amount of descriptor labels to the grid based on the amount of the most important meta values
         for (int i = 0; i < ATTR_AMOUNT; i++) {
@@ -84,7 +83,7 @@ public class AlbumController {
         // Add an amount of value labels to the grid based on the amount of the most important meta value
         for (int i = 0; i < ATTR_AMOUNT; i++) {
             Label imageValue = new Label();
-            imageValue.setText(String.format("Value %d:", i));
+            imageValue.setText(String.format("Value %d", i));
             imageValue.setVisible(true);
             imageMetaPane.add(imageValue, 1, i);
         }
@@ -93,7 +92,7 @@ public class AlbumController {
         imageBorderPane.setTop(imageView);
         BorderPane.setMargin(imageView, new Insets(5, 5, 0, 5));
         imageBorderPane.setCenter(imageMetaPane);
-        BorderPane.setMargin(imageMetaPane, new Insets(0, 10, 0, 10));
+        BorderPane.setMargin(imageMetaPane, new Insets(10, 10, 0, 10));
 
         imagePane.getChildren().add(imageBorderPane);
         return imagePane;
