@@ -20,8 +20,6 @@ public class AlbumController {
 
     private static final int ATTR_AMOUNT = 3; // Used to test dynamic attribute and value adding to imageGrid
     private Album album;
-    private ImageService imageService;
-    private List<Image> images;
 
     @FXML
     private Label albumTitle;
@@ -99,9 +97,8 @@ public class AlbumController {
     }
 
     public void initializeAlbum() {
-        System.out.println(album.getId());
-        imageService = new ImageService();
-        images = imageService.getImagesForAlbum(album);
+        ImageService imageService = new ImageService();
+        List<Image> images = imageService.getImagesForAlbum(album);
 
         int col = 0;
         int row = 0;
