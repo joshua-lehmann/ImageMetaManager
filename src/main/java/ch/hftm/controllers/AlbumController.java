@@ -71,20 +71,10 @@ public class AlbumController {
         imageMetaPane.getColumnConstraints().add(col1);
 
         // Add an amount of descriptor labels to the grid based on the amount of the most important meta values
-        for (int i = 0; i < ATTR_AMOUNT; i++) {
-            Label imageAttr = new Label();
-            imageAttr.setText(String.format("Attribute %d:", i));
-            imageAttr.setVisible(true);
-            imageMetaPane.add(imageAttr, 0, i);
-        }
+        createLabel(imageMetaPane, 0, "Attribute");
 
         // Add an amount of value labels to the grid based on the amount of the most important meta value
-        for (int i = 0; i < ATTR_AMOUNT; i++) {
-            Label imageValue = new Label();
-            imageValue.setText(String.format("Value %d", i));
-            imageValue.setVisible(true);
-            imageMetaPane.add(imageValue, 1, i);
-        }
+        createLabel(imageMetaPane, 1, "Value");
 
         BorderPane imageBorderPane = new BorderPane();
         imageBorderPane.setTop(imageView);
@@ -94,6 +84,15 @@ public class AlbumController {
 
         imagePane.getChildren().add(imageBorderPane);
         return imagePane;
+    }
+
+    private void createLabel(GridPane pane, int column, String labelText) {
+        for (int i = 0; i < ATTR_AMOUNT; i++) {
+            Label label = new Label();
+            label.setText(String.format("%s %d:",labelText, i));
+            label.setVisible(true);
+            pane.add(label, column, i);
+        }
     }
 
     public void initializeAlbum() {
