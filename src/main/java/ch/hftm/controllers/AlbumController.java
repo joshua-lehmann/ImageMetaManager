@@ -111,6 +111,7 @@ public class AlbumController {
             // Place the image on a new row if the current column is full of images
             if (col % imageGrid.getColumnCount() == 0) {
                 row++;
+                col = 0;
             }
         }
 
