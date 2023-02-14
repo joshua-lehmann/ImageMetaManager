@@ -7,12 +7,9 @@ import ch.hftm.service.ImageService;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
@@ -23,21 +20,12 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class PrimaryController implements Initializable {
-    @FXML
-    private ScrollPane scrollPaneLibrary;
-
-    @FXML
-    private AnchorPane anchorPaneLibrary;
-
-    @FXML
-    private Button albumButton;
 
     @FXML
     private Pane albumContainer;
 
     @FXML
     private GridPane albumGrid;
-
 
     public void onAlbumClick(MouseEvent event) throws IOException {
         AlbumService albumService = new AlbumService();
@@ -94,11 +82,16 @@ public class PrimaryController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         AlbumService albumService = new AlbumService();
         List<Album> albums = albumService.getAllAlbums();
-
-        int row = 0;
+        final int ITEMS_PER_ROW = 4;
+        int rowIndex = 0;
+        int columnIndex = 0;
         for (Album album : albums) {
-            albumGrid.add(createAlbumPane(album, albumContainer), 1, row);
-            row++;
+            albumGrid.add(createAlbumPane(album, albumContainer), columnIndex, rowIndex);
+            columnIndex++;
+            if (columnIndex == ITEMS_PER_ROW) {
+                columnIndex = 0;
+                rowIndex++;
+            }
         }
     }
 }
