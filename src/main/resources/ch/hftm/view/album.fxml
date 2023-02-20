@@ -62,7 +62,7 @@
          <bottom>
             <HBox prefHeight="75.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label fx:id="albumStatus" prefHeight="20.0" text="Status">
+                  <Label fx:id="albumStatus" prefHeight="20.0" text="Status" visible="false">
                      <HBox.margin>
                         <Insets left="500.0" top="22.5" />
                      </HBox.margin>

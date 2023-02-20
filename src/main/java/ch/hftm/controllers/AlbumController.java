@@ -124,6 +124,22 @@ public class AlbumController {
         }
     }
 
+    /**
+     * 
+     * @param status The status to be shown in the album view
+     * @param duration The status is shown for this duration
+     */
+    private void updateAlbumStatus(String status, double duration) {
+        albumStatus.setVisible(true);
+        albumStatus.setText(status);
+        Timeline timeline = new Timeline(
+            new KeyFrame(
+                Duration.millis(duration), 
+                kf -> albumStatus.setText("")));
+        timeline.play();
+        timeline.setOnFinished(e -> albumStatus.setVisible(false));
+    }
+
     public void initializeAlbum() {
         ImageService imageService = new ImageService();
         List<Image> images = imageService.getImagesForAlbum(album);
