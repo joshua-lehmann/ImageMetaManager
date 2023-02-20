@@ -36,11 +36,12 @@ public class ImageService {
         }
     }
 
-    public void createImage(File file, Album album) {
+    public Image createImage(File file, Album album) {
         Image image = new Image(file, album.getId());
         List<Image> existingImages = getAllImages();
         existingImages.add(image);
         writeImagesToJson(existingImages);
+        return image;
     }
 
     public List<Image> getAllImages() {

@@ -83,14 +83,18 @@ public class AlbumService {
         return null;
     }
 
+    public int getAlbumCount() {
+        return getAllAlbums().size();
+    }
+
     public void createTestData() {
         if (!getAllAlbums().isEmpty()) {
             return;
         }
         ImageService imageService = new ImageService();
-        Album album = createAlbum("Vacation", "Vacation Album");
+        Album album = createAlbum("Sample Album", "Album with one image");
         imageService.createImage(new File("src/test/resources/DSCN0010.jpg"), album);
-        Album album2 = createAlbum("Test Album", "Test Album");
+        Album album2 = createAlbum("Multi Image Sample", "Album with two images");
         imageService.createImage(new File("src/test/resources/DSCN0021.jpg"), album2);
         imageService.createImage(new File("src/test/resources/DSCN0012.jpg"), album2);
     }
