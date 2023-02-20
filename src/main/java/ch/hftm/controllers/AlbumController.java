@@ -29,6 +29,7 @@ public class AlbumController {
 
     private static final int ATTR_AMOUNT = 3; // Used to test dynamic attribute and value adding to imageGrid
     private Album album;
+    private List<Image> imagesToDelete = new ArrayList<>();
 
     @FXML
     private Label albumTitle;
@@ -63,6 +64,24 @@ public class AlbumController {
         Pane imagePane = new Pane();
         imagePane.setPrefHeight(samplePane.getPrefHeight());
         imagePane.setPrefWidth(samplePane.getPrefWidth());
+        imagePane.setOnMouseClicked(event -> {
+                ImageService imageService = new ImageService();
+                Node source = (Node) event.getSource();
+                Label imageName = (Label) source.lookup("#imageName");
+                System.out.println(imageName.getText());
+                Image image2 = imageService.getImageByFileName(imageName.getText());
+                if (source.getStyle() == "") {
+                    source.setStyle("-fx-border-style: solid; -fx-border-width: 3; -fx-border-color: blue;"); 
+                    imagesToDelete.add(image2);
+                } else {
+                    source.setStyle(null);
+                    imagesToDelete.remove(image2);
+                } 
+        });
+
+        Label imageName = new Label(image.getFileName());
+        imageName.setId("imageName");
+        imageName.setVisible(false);
 
         ImageView sampleImageView = (ImageView) samplePane.lookup("#imageView");
         ImageView imageView = new ImageView();
