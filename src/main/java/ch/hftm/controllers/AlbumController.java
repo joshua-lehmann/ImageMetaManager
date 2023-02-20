@@ -1,19 +1,28 @@
 package ch.hftm.controllers;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import ch.hftm.data.Album;
 import ch.hftm.data.Image;
 import ch.hftm.service.ImageService;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.util.Duration;
 
 
 public class AlbumController {
@@ -83,6 +92,7 @@ public class AlbumController {
         BorderPane.setMargin(imageMetaPane, new Insets(10, 10, 0, 10));
 
         imagePane.getChildren().add(imageBorderPane);
+        imagePane.getChildren().add(imageName);
         return imagePane;
     }
 
