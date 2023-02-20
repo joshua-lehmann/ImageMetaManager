@@ -67,7 +67,6 @@ public class AlbumController {
                 ImageService imageService = new ImageService();
                 Node source = (Node) event.getSource();
                 Label imageName = (Label) source.lookup("#imageName");
-                System.out.println(imageName.getText());
                 Image image2 = imageService.getImageByFileName(imageName.getText());
                 if (source.getStyle().equals("")) {
                     source.setStyle("-fx-border-style: solid; -fx-border-width: 3; -fx-border-color: blue;"); 
@@ -134,12 +133,10 @@ public class AlbumController {
         Optional<ButtonType> choice = alert.showAndWait();
 
         if (choice.isPresent() && choice.get() == okButton) {
-            System.out.println("Images to delete:");
             ImageService imageService = new ImageService();
-            if (!(imagesToDelete.size() <= 0)) {
+            if (!(imagesToDelete.isEmpty())) {
                 int i = 0;
                 for (Image image : imagesToDelete) {
-                    System.out.println(image.getFileName());
                     imageService.deleteImage(image);
                     i++;
                 }
