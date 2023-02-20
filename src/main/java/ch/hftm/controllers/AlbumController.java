@@ -36,7 +36,6 @@ public class AlbumController {
 
     @FXML
     private Label albumStatus;
-    // TODO: Add status updates
 
     @FXML
     private GridPane imageGrid;
@@ -166,6 +165,9 @@ public class AlbumController {
     }
 
     public void initializeAlbum() {
+        // Clear the imageGrid of all children nodes
+        imageGrid.getChildren().clear();
+        
         ImageService imageService = new ImageService();
         List<Image> images = imageService.getImagesForAlbum(album);
 
