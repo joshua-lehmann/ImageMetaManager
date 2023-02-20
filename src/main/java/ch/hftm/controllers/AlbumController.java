@@ -69,7 +69,7 @@ public class AlbumController {
                 Label imageName = (Label) source.lookup("#imageName");
                 System.out.println(imageName.getText());
                 Image image2 = imageService.getImageByFileName(imageName.getText());
-                if (source.getStyle() == "") {
+                if (source.getStyle().equals("")) {
                     source.setStyle("-fx-border-style: solid; -fx-border-width: 3; -fx-border-color: blue;"); 
                     imagesToDelete.add(image2);
                 } else {
@@ -133,7 +133,7 @@ public class AlbumController {
         alert.getButtonTypes().setAll(okButton, cancelButton);
         Optional<ButtonType> choice = alert.showAndWait();
 
-        if (choice.get() == okButton) {
+        if (choice.isPresent() && choice.get() == okButton) {
             System.out.println("Images to delete:");
             ImageService imageService = new ImageService();
             if (!(imagesToDelete.size() <= 0)) {
