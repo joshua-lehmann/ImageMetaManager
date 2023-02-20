@@ -136,16 +136,27 @@ public class AlbumController {
         if (choice.get() == okButton) {
             System.out.println("Images to delete:");
             ImageService imageService = new ImageService();
-            int i = 0;
-            for (Image image : imagesToDelete) {
-                System.out.println(image.getFileName());
-                imageService.deleteImage(image);
-                i++;
+            if (!(imagesToDelete.size() <= 0)) {
+                int i = 0;
+                for (Image image : imagesToDelete) {
+                    System.out.println(image.getFileName());
+                    imageService.deleteImage(image);
+                    i++;
+                }
+                updateAlbumStatus(String.format("Deleted %d image(s).", i), 5_000);
+                initializeAlbum();
+            } else {
+                Alert info = new Alert(AlertType.INFORMATION);
+                info.setTitle("Invalid selection");
+                info.setContentText("No images where selected.");
+                info.showAndWait();
             }
-            updateAlbumStatus(String.format("Deleted %d image(s).", i), 5_000);
-            imagesToDelete.clear();
-            initializeAlbum();
+        } else {
+            for (Node child : imageGrid.getChildren()) {
+                child.setStyle(null);
+            }
         }
+        imagesToDelete.clear();
     }
 
     /**
