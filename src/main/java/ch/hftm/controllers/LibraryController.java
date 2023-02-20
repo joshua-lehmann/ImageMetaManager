@@ -104,7 +104,6 @@ public class LibraryController implements Initializable {
         albumPane.setPrefHeight(samplePane.getPrefHeight());
         albumPane.setPrefWidth(samplePane.getPrefWidth());
         albumPane.setOnMouseClicked(samplePane.getOnMouseClicked());
-        albumPane.setStyle(samplePane.getStyle());
         albumPane.setId(samplePane.getId());
 
         ImageView sampleImageView = (ImageView) samplePane.lookup("#albumImage");
