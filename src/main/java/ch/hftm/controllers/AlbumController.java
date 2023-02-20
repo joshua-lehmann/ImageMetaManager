@@ -124,6 +124,31 @@ public class AlbumController {
         }
     }
 
+    @FXML
+    public void deleteImage() {
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Delete selected images");
+        alert.setContentText("If you want to delete the selected images press OK.");
+        ButtonType okButton = new ButtonType("OK");
+        ButtonType cancelButton = new ButtonType("Cancel");
+        alert.getButtonTypes().setAll(okButton, cancelButton);
+        Optional<ButtonType> choice = alert.showAndWait();
+
+        if (choice.get() == okButton) {
+            System.out.println("Images to delete:");
+            ImageService imageService = new ImageService();
+            int i = 0;
+            for (Image image : imagesToDelete) {
+                System.out.println(image.getFileName());
+                imageService.deleteImage(image);
+                i++;
+            }
+            updateAlbumStatus(String.format("Deleted %d image(s).", i), 5_000);
+            imagesToDelete.clear();
+            initializeAlbum();
+        }
+    }
+
     /**
      * 
      * @param status The status to be shown in the album view

@@ -23,7 +23,7 @@
                         <Insets left="10.0" top="22.5" />
                      </HBox.margin>
                   </Label>
-                  <Button mnemonicParsing="false" text="Delete">
+                  <Button mnemonicParsing="false" onAction="#deleteImage" text="Delete">
                      <HBox.margin>
                         <Insets top="20.0" />
                      </HBox.margin>
