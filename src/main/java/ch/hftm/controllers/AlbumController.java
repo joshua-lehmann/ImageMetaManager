@@ -45,6 +45,8 @@ public class AlbumController {
     private static final String DEFAULT_TITLE = "Invalid Selection";
 
     private ImageService imageService;
+    private static final String FALLBACK_DIR = System.getenv("USERPROFILE");
+
     private Album album;
     private List<Image> imageSelection = new ArrayList<>();
 
