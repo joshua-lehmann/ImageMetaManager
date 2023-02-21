@@ -1,32 +1,42 @@
 package ch.hftm.controllers;
 
-import java.io.File;
-import java.util.List;
-
 import ch.hftm.data.Album;
 import ch.hftm.data.Image;
 import ch.hftm.service.ImageService;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.util.Duration;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 
 public class AlbumController {
 
     private static final int ATTR_AMOUNT = 3; // Used to test dynamic attribute and value adding to imageGrid
+    private ImageService imageService;
     private Album album;
+    private List<Image> imagesToDelete = new ArrayList<>();
 
     @FXML
     private Label albumTitle;
 
     @FXML
     private Label albumStatus;
-    // TODO: Add status updates
 
     @FXML
     private GridPane imageGrid;
@@ -54,6 +64,22 @@ public class AlbumController {
         Pane imagePane = new Pane();
         imagePane.setPrefHeight(samplePane.getPrefHeight());
         imagePane.setPrefWidth(samplePane.getPrefWidth());
+        imagePane.setOnMouseClicked(event -> {
+            Node source = (Node) event.getSource();
+            Label imageName = (Label) source.lookup("#imageName");
+            Image imageToDelete = imageService.getImageByFileName(imageName.getText());
+            if (source.getStyle().equals("")) {
+                source.setStyle("-fx-border-style: solid; -fx-border-width: 3; -fx-border-color: blue;");
+                imagesToDelete.add(imageToDelete);
+            } else {
+                source.setStyle(null);
+                imagesToDelete.remove(imageToDelete);
+            }
+        });
+
+        Label imageName = new Label(image.getFileName());
+        imageName.setId("imageName");
+        imageName.setVisible(false);
 
         ImageView sampleImageView = (ImageView) samplePane.lookup("#imageView");
         ImageView imageView = new ImageView();
@@ -83,20 +109,72 @@ public class AlbumController {
         BorderPane.setMargin(imageMetaPane, new Insets(10, 10, 0, 10));
 
         imagePane.getChildren().add(imageBorderPane);
+        imagePane.getChildren().add(imageName);
         return imagePane;
     }
 
     private void createLabel(GridPane pane, int column, String labelText) {
         for (int i = 0; i < ATTR_AMOUNT; i++) {
             Label label = new Label();
-            label.setText(String.format("%s %d:",labelText, i));
+            label.setText(String.format("%s %d:", labelText, i));
             label.setVisible(true);
             pane.add(label, column, i);
         }
     }
 
+    @FXML
+    public void deleteImage() {
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Delete selected images");
+        alert.setContentText("If you want to delete the selected images press OK.");
+        ButtonType okButton = new ButtonType("OK");
+        ButtonType cancelButton = new ButtonType("Cancel");
+        alert.getButtonTypes().setAll(okButton, cancelButton);
+        Optional<ButtonType> choice = alert.showAndWait();
+
+        if (choice.isEmpty() || choice.get() != okButton) {
+            for (Node child : imageGrid.getChildren()) {
+                child.setStyle(null);
+            }
+            imagesToDelete.clear();
+            return;
+        }
+        if (imagesToDelete.isEmpty()) {
+            Alert info = new Alert(AlertType.INFORMATION);
+            info.setTitle("Invalid selection");
+            info.setContentText("No images where selected.");
+            info.showAndWait();
+            imagesToDelete.clear();
+            return;
+        }
+        int i = 0;
+        for (Image image : imagesToDelete) {
+            imageService.deleteImage(image);
+            i++;
+        }
+        updateAlbumStatus(String.format("Deleted %d image(s).", i), 5_000);
+        initializeAlbum();
+    }
+
+    /**
+     * @param status   The status to be shown in the album view
+     * @param duration The status is shown for this duration
+     */
+    private void updateAlbumStatus(String status, double duration) {
+        albumStatus.setVisible(true);
+        albumStatus.setText(status);
+        Timeline timeline = new Timeline(
+                new KeyFrame(
+                        Duration.millis(duration),
+                        kf -> albumStatus.setText("")));
+        timeline.play();
+        timeline.setOnFinished(e -> albumStatus.setVisible(false));
+    }
+
     public void initializeAlbum() {
-        ImageService imageService = new ImageService();
+        // Clear the imageGrid of all children nodes
+        imageGrid.getChildren().clear();
+
         List<Image> images = imageService.getImagesForAlbum(album);
 
         int col = 0;
@@ -111,6 +189,11 @@ public class AlbumController {
             }
         }
 
+    }
+
+    @FXML
+    public void initialize() {
+        imageService = new ImageService();
     }
 
 }
