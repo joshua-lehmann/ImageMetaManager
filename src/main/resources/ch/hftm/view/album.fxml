@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.hftm.controllers.AlbumController">
     <children>
@@ -65,14 +66,15 @@
             </GridPane>
          </center>
          <bottom>
-            <HBox prefHeight="75.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <VBox alignment="CENTER" prefHeight="75.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label fx:id="albumStatus" prefHeight="20.0" text="Status" visible="false">
-                     <HBox.margin>
-                        <Insets left="500.0" top="22.5" />
-                     </HBox.margin>
+                  <Label fx:id="albumStatus" alignment="BASELINE_CENTER" contentDisplay="CENTER" prefHeight="20.0" text="Status" visible="false">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
                   </Label>
-               </children></HBox>
+               </children>
+            </VBox>
          </bottom>
       </BorderPane>
     </children>
