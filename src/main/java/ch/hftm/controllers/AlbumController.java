@@ -33,18 +33,12 @@ import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 
 @Slf4j
 public class AlbumController {
 
     public static final String STORAGE_DIRECTORY_JSON = System.getProperty("defaultDir-json", System.getenv("USERPROFILE") + "\\image-meta-manager\\defaultDir.json");
     private static final int ATTR_AMOUNT = 3; // Used to test dynamic attribute and value adding to imageGrid
-    private static File defaultDirectory = new File(System.getenv("USERPROFILE") + "\\image-meta-manager");
     private ImageService imageService;
     private static final String FALLBACK_DIR = System.getenv("USERPROFILE");
 
