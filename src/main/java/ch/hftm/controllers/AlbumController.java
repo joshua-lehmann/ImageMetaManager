@@ -190,7 +190,6 @@ public class AlbumController {
             Path newPath = Paths.get(selectedFile.getAbsolutePath());
             writeDefaultDirectoryToJson(newPath.getParent().toString());
 
-            ImageService imageService = new ImageService();
             Image newImage = imageService.createImage(selectedFile, album);
             initializeAlbum();
             updateAlbumStatus(String.format("New image %s was added", newImage.getFileName()), 5_000);
