@@ -1,5 +1,13 @@
 package ch.hftm.controllers;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import ch.hftm.data.Album;
 import ch.hftm.data.Image;
 import ch.hftm.service.ImageService;
@@ -17,6 +25,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 import javafx.util.Duration;
 
 import java.io.File;
@@ -31,6 +40,10 @@ public class AlbumController {
     private ImageService imageService;
     private Album album;
     private List<Image> imagesToDelete = new ArrayList<>();
+    private static File defaultDirectory = new File(System.getenv("USERPROFILE") + "\\image-meta-manager");
+
+    @FXML
+    private BorderPane albumPane;
 
     @FXML
     private Label albumTitle;
@@ -154,6 +167,36 @@ public class AlbumController {
         }
         updateAlbumStatus(String.format("Deleted %d image(s).", i), 5_000);
         initializeAlbum();
+    }
+
+    @FXML
+    public void addImage() throws IOException {
+        // TODO: Check which image file formats should be supported
+        // Create a FileChooser in the default directory and only show files of the type jpg, png
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(defaultDirectory);
+        fileChooser.getExtensionFilters().addAll(
+            new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.png")
+        );
+
+        // Create a new image in the current album if a supported file was selected
+        // Otherwise inform the user that no image could be added
+        File selectedFile = fileChooser.showOpenDialog(albumPane.getScene().getWindow());
+        if (selectedFile != null) {
+            // Overwrite the default directory to the current directory
+            Path newPath = Paths.get(selectedFile.getAbsolutePath());
+            defaultDirectory = new File(newPath.getParent().toString());
+
+            ImageService imageService = new ImageService();
+            Image newImage = imageService.createImage(selectedFile, album);
+            initializeAlbum();
+            updateAlbumStatus(String.format("New image %s was added", newImage.getFileName()), 5_000);
+        } else {
+            Alert info = new Alert(AlertType.INFORMATION);
+            info.setTitle("Invalid selection");
+            info.setContentText("No image can be added because no image was selected.");
+            info.showAndWait();
+        }
     }
 
     /**
