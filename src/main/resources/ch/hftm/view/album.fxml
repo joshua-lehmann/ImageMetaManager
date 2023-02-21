@@ -14,7 +14,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.hftm.controllers.AlbumController">
     <children>
-      <BorderPane prefHeight="800.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <BorderPane fx:id="albumPane" prefHeight="800.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
             <HBox prefHeight="75.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
@@ -23,9 +23,14 @@
                         <Insets left="10.0" top="22.5" />
                      </HBox.margin>
                   </Label>
-                  <Button mnemonicParsing="false" onAction="#deleteImage" text="Delete">
+                  <Button mnemonicParsing="false" onAction="#addImage" text="Add">
                      <HBox.margin>
                         <Insets top="20.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#deleteImage" text="Delete">
+                     <HBox.margin>
+                        <Insets left="20.0" top="20.0" />
                      </HBox.margin>
                   </Button>
                </children>
