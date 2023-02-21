@@ -132,28 +132,28 @@ public class AlbumController {
         alert.getButtonTypes().setAll(okButton, cancelButton);
         Optional<ButtonType> choice = alert.showAndWait();
 
-        if (choice.isPresent() && choice.get() == okButton) {
-            ImageService imageService = new ImageService();
-            if (!(imagesToDelete.isEmpty())) {
-                int i = 0;
-                for (Image image : imagesToDelete) {
-                    imageService.deleteImage(image);
-                    i++;
-                }
-                updateAlbumStatus(String.format("Deleted %d image(s).", i), 5_000);
-                initializeAlbum();
-            } else {
-                Alert info = new Alert(AlertType.INFORMATION);
-                info.setTitle("Invalid selection");
-                info.setContentText("No images where selected.");
-                info.showAndWait();
-            }
-        } else {
+        if (!choice.isPresent() || choice.get() != okButton) {
             for (Node child : imageGrid.getChildren()) {
                 child.setStyle(null);
             }
+            imagesToDelete.clear();
+            return;
         }
-        imagesToDelete.clear();
+        if (imagesToDelete.isEmpty()) {
+            Alert info = new Alert(AlertType.INFORMATION);
+            info.setTitle("Invalid selection");
+            info.setContentText("No images where selected.");
+            info.showAndWait();
+            imagesToDelete.clear();
+            return;
+        }
+        int i = 0;
+        for (Image image : imagesToDelete) {
+            imageService.deleteImage(image);
+            i++;
+        }
+        updateAlbumStatus(String.format("Deleted %d image(s).", i), 5_000);
+        initializeAlbum();
     }
 
     /**
