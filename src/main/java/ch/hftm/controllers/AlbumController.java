@@ -28,6 +28,7 @@ import javafx.util.Duration;
 public class AlbumController {
 
     private static final int ATTR_AMOUNT = 3; // Used to test dynamic attribute and value adding to imageGrid
+    private static ImageService imageService;
     private Album album;
     private List<Image> imagesToDelete = new ArrayList<>();
 
@@ -64,7 +65,6 @@ public class AlbumController {
         imagePane.setPrefHeight(samplePane.getPrefHeight());
         imagePane.setPrefWidth(samplePane.getPrefWidth());
         imagePane.setOnMouseClicked(event -> {
-                ImageService imageService = new ImageService();
                 Node source = (Node) event.getSource();
                 Label imageName = (Label) source.lookup("#imageName");
                 Image imageToDelete = imageService.getImageByFileName(imageName.getText());
@@ -176,7 +176,6 @@ public class AlbumController {
         // Clear the imageGrid of all children nodes
         imageGrid.getChildren().clear();
         
-        ImageService imageService = new ImageService();
         List<Image> images = imageService.getImagesForAlbum(album);
 
         int col = 0;
@@ -191,6 +190,11 @@ public class AlbumController {
             }
         }
 
+    }
+
+    @FXML
+    public void initialize() {
+        imageService = new ImageService();
     }
 
 }
