@@ -1,7 +1,6 @@
 package ch.hftm.controllers;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -170,7 +169,7 @@ public class AlbumController {
     }
 
     @FXML
-    public void addImage() throws IOException {
+    public void addImage() {
         // TODO: Check which image file formats should be supported
         // Create a FileChooser in the default directory and only show files of the type jpg, png
         FileChooser fileChooser = new FileChooser();
