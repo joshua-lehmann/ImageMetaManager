@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
@@ -45,6 +46,8 @@ public class AlbumController {
     private static final int ATTR_AMOUNT = 3; // Used to test dynamic attribute and value adding to imageGrid
     private static File defaultDirectory = new File(System.getenv("USERPROFILE") + "\\image-meta-manager");
     private ImageService imageService;
+    private static final String FALLBACK_DIR = System.getenv("USERPROFILE");
+
     private Album album;
     private List<Image> imagesToDelete = new ArrayList<>();
 
@@ -180,7 +183,7 @@ public class AlbumController {
         // TODO: Check which image file formats should be supported
         // Create a FileChooser in the default directory and only show files of the type jpg, png
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setInitialDirectory(defaultDirectory);
+        fileChooser.setInitialDirectory(getDefaultDirectory());
         fileChooser.getExtensionFilters().addAll(
             new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.png")
         );
@@ -191,7 +194,6 @@ public class AlbumController {
         if (selectedFile != null) {
             // Overwrite the default directory to the current directory
             Path newPath = Paths.get(selectedFile.getAbsolutePath());
-            defaultDirectory = new File(newPath.getParent().toString());
             writeDefaultDirectoryToJson(newPath.getParent().toString());
 
             ImageService imageService = new ImageService();
@@ -224,6 +226,25 @@ public class AlbumController {
         } catch (Exception e) {
             log.error("Could not write default directory to file: {} {}", STORAGE_DIRECTORY_JSON, e.getMessage());
         }
+    }
+
+    /**
+     *
+     * @return If the last used directory is stored in JSON, the stored directory is returned.
+     *         Otherwise a fall-back directory is returned.
+     */
+    private File getDefaultDirectory() {
+        File storageFile = new File(STORAGE_DIRECTORY_JSON);
+        if (storageFile.exists()) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                String directory = objectMapper.readValue(storageFile, new TypeReference<String>() {});
+                return new File(directory);
+            } catch (Exception e) {
+                log.error("Could not read default directory from file {}", e.getMessage());
+            }
+        }
+        return new File(FALLBACK_DIR);
     }
 
     /**
