@@ -1,11 +1,15 @@
 package ch.hftm.controllers;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import ch.hftm.data.Album;
 import ch.hftm.data.Image;
@@ -26,6 +30,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -33,13 +38,15 @@ import java.util.List;
 import java.util.Optional;
 
 
+@Slf4j
 public class AlbumController {
 
+    public static final String STORAGE_DIRECTORY_JSON = System.getProperty("defaultDir-json", System.getenv("USERPROFILE") + "\\image-meta-manager\\defaultDir.json");
     private static final int ATTR_AMOUNT = 3; // Used to test dynamic attribute and value adding to imageGrid
+    private static File defaultDirectory = new File(System.getenv("USERPROFILE") + "\\image-meta-manager");
     private ImageService imageService;
     private Album album;
     private List<Image> imagesToDelete = new ArrayList<>();
-    private static File defaultDirectory = new File(System.getenv("USERPROFILE") + "\\image-meta-manager");
 
     @FXML
     private BorderPane albumPane;
@@ -185,6 +192,7 @@ public class AlbumController {
             // Overwrite the default directory to the current directory
             Path newPath = Paths.get(selectedFile.getAbsolutePath());
             defaultDirectory = new File(newPath.getParent().toString());
+            writeDefaultDirectoryToJson(newPath.getParent().toString());
 
             ImageService imageService = new ImageService();
             Image newImage = imageService.createImage(selectedFile, album);
@@ -195,6 +203,26 @@ public class AlbumController {
             info.setTitle("Invalid selection");
             info.setContentText("No image can be added because no image was selected.");
             info.showAndWait();
+        }
+    }
+
+    private void writeDefaultDirectoryToJson(String directoryPath) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+
+        try {
+            File storageFile = new File(STORAGE_DIRECTORY_JSON);
+            File storageDir = storageFile.getParentFile();
+            if (!storageDir.exists()) {
+                storageDir.mkdirs();
+            }
+            if (!storageFile.exists()) {
+                Files.write(Path.of(storageFile.getPath()), "[]".getBytes());
+            }
+
+            objectMapper.writeValue(storageFile, directoryPath);
+        } catch (Exception e) {
+            log.error("Could not write default directory to file: {} {}", STORAGE_DIRECTORY_JSON, e.getMessage());
         }
     }
 
