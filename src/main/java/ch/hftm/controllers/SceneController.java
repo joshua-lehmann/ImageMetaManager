@@ -1,16 +1,15 @@
 package ch.hftm.controllers;
 
+import java.io.IOException;
+
 import ch.hftm.App;
 import ch.hftm.data.Album;
-import ch.hftm.data.Image;
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.io.IOException;
 
 public class SceneController {
     private Stage stage;
@@ -37,10 +36,10 @@ public class SceneController {
         root = fxmlLoader.load();
 
         var controller = fxmlLoader.getController();
-        if (controller instanceof AlbumController && data instanceof ch.hftm.data.Album) {
-            ((AlbumController) controller).setAlbum((Album) data);
-        } else if (controller instanceof ImageController && data instanceof ch.hftm.data.Image) {
-            ((ImageController) controller).setImage((Image) data);
+        if (controller instanceof AlbumController albumController && data instanceof ch.hftm.data.Album album) {
+            albumController.setAlbum(album);
+        } else if (controller instanceof ImageController imageController && data instanceof ch.hftm.data.Image image) {
+            imageController.setImage(image);
         }
 
         stage = (Stage) scene.getWindow();
