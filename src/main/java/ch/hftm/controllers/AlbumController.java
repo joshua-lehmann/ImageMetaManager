@@ -41,9 +41,10 @@ public class AlbumController {
 
     public static final String STORAGE_DIRECTORY_JSON = System.getProperty("defaultDir-json", System.getenv("USERPROFILE") + "\\image-meta-manager\\defaultDir.json");
     private static final int ATTR_AMOUNT = 3; // Used to test dynamic attribute and value adding to imageGrid
-    private ImageService imageService;
     private static final String FALLBACK_DIR = System.getenv("USERPROFILE");
+    private static final String DEFAULT_TITLE = "Invalid Selection";
 
+    private ImageService imageService;
     private Album album;
     private List<Image> imageSelection = new ArrayList<>();
 
@@ -158,10 +159,7 @@ public class AlbumController {
             return;
         }
         if (imageSelection.isEmpty()) {
-            Alert info = new Alert(AlertType.INFORMATION);
-            info.setTitle("Invalid selection");
-            info.setContentText("No images where selected.");
-            info.showAndWait();
+            alertUser("", "No images were selected.", AlertType.WARNING);
             imageSelection.clear();
             return;
         }
@@ -196,10 +194,7 @@ public class AlbumController {
             initializeAlbum();
             updateAlbumStatus(String.format("New image %s was added", newImage.getFileName()), 5_000);
         } else {
-            Alert info = new Alert(AlertType.INFORMATION);
-            info.setTitle("Invalid selection");
-            info.setContentText("No image can be added because no image was selected.");
-            info.showAndWait();
+            alertUser(DEFAULT_TITLE, "No image can be added because no image was selected.", AlertType.INFORMATION);
         }
     }
 
@@ -279,7 +274,7 @@ public class AlbumController {
 
     @FXML
     public void editImage() {
-        String title = "Invalid selection";
+        String title = "";
         String content = "";
         if (imageSelection.size() == 1) {
             Image imageToEdit = imageSelection.get(0);
@@ -295,15 +290,18 @@ public class AlbumController {
             }
         } else if (imageSelection.isEmpty()) {
             content = "You need to select an image you want to edit.";
-            warnUser(title, content);
+            alertUser(title, content, AlertType.WARNING);
         } else {
             content = "Only one image at a time can be edited.";
-            warnUser(title, content);
+            alertUser(title, content, AlertType.WARNING);
         }
     }
 
-    private void warnUser(String title, String content) {
-        Alert info = new Alert(AlertType.WARNING);
+    private void alertUser(String title, String content, AlertType alertType) {
+        if (title.equals("")) {
+            title = DEFAULT_TITLE;
+        }
+        Alert info = new Alert(alertType);
         info.setTitle(title);
         info.setContentText(content);
         info.showAndWait();
