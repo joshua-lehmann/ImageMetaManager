@@ -35,7 +35,6 @@ public class ImageController {
     }
 
     private void initializeImage() {
-        // imageName.setText(image.getFileName());
         javafx.scene.image.Image fxImage = new javafx.scene.image.Image(new File(image.getFullPath()).toURI().toString());
         imageView.setImage(fxImage);
         
