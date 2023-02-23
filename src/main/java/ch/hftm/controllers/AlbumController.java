@@ -1,5 +1,17 @@
 package ch.hftm.controllers;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 import ch.hftm.data.Album;
 import ch.hftm.data.Image;
 import ch.hftm.service.ImageService;
@@ -17,20 +29,24 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 import javafx.util.Duration;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 
 
+@Slf4j
 public class AlbumController {
 
+    public static final String STORAGE_DIRECTORY_JSON = System.getProperty("defaultDir-json", System.getenv("USERPROFILE") + "\\image-meta-manager\\defaultDir.json");
     private static final int ATTR_AMOUNT = 3; // Used to test dynamic attribute and value adding to imageGrid
     private ImageService imageService;
+    private static final String FALLBACK_DIR = System.getenv("USERPROFILE");
+
     private Album album;
     private List<Image> imagesToDelete = new ArrayList<>();
+
+    @FXML
+    private BorderPane albumPane;
 
     @FXML
     private Label albumTitle;
@@ -154,6 +170,74 @@ public class AlbumController {
         }
         updateAlbumStatus(String.format("Deleted %d image(s).", i), 5_000);
         initializeAlbum();
+    }
+
+    @FXML
+    public void addImage() {
+        // TODO: Check which image file formats should be supported
+        // Create a FileChooser in the default directory and only show files of the type jpg, png
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(getDefaultDirectory());
+        fileChooser.getExtensionFilters().addAll(
+            new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.png")
+        );
+
+        // Create a new image in the current album if a supported file was selected
+        // Otherwise inform the user that no image could be added
+        File selectedFile = fileChooser.showOpenDialog(albumPane.getScene().getWindow());
+        if (selectedFile != null) {
+            // Overwrite the default directory to the current directory
+            Path newPath = Paths.get(selectedFile.getAbsolutePath());
+            writeDefaultDirectoryToJson(newPath.getParent().toString());
+
+            Image newImage = imageService.createImage(selectedFile, album);
+            initializeAlbum();
+            updateAlbumStatus(String.format("New image %s was added", newImage.getFileName()), 5_000);
+        } else {
+            Alert info = new Alert(AlertType.INFORMATION);
+            info.setTitle("Invalid selection");
+            info.setContentText("No image can be added because no image was selected.");
+            info.showAndWait();
+        }
+    }
+
+    private void writeDefaultDirectoryToJson(String directoryPath) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+
+        try {
+            File storageFile = new File(STORAGE_DIRECTORY_JSON);
+            File storageDir = storageFile.getParentFile();
+            if (!storageDir.exists()) {
+                storageDir.mkdirs();
+            }
+            if (!storageFile.exists()) {
+                Files.write(Path.of(storageFile.getPath()), "[]".getBytes());
+            }
+
+            objectMapper.writeValue(storageFile, directoryPath);
+        } catch (Exception e) {
+            log.error("Could not write default directory to file: {} {}", STORAGE_DIRECTORY_JSON, e.getMessage());
+        }
+    }
+
+    /**
+     *
+     * @return If the last used directory is stored in JSON, the stored directory is returned.
+     *         Otherwise a fall-back directory is returned.
+     */
+    private File getDefaultDirectory() {
+        File storageFile = new File(STORAGE_DIRECTORY_JSON);
+        if (storageFile.exists()) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                String directory = objectMapper.readValue(storageFile, new TypeReference<String>() {});
+                return new File(directory);
+            } catch (Exception e) {
+                log.error("Could not read default directory from file {}", e.getMessage());
+            }
+        }
+        return new File(FALLBACK_DIR);
     }
 
     /**
