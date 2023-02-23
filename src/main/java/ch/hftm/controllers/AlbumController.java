@@ -1,6 +1,7 @@
 package ch.hftm.controllers;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -20,6 +21,7 @@ import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
@@ -43,7 +45,7 @@ public class AlbumController {
     private static final String FALLBACK_DIR = System.getenv("USERPROFILE");
 
     private Album album;
-    private List<Image> imagesToDelete = new ArrayList<>();
+    private List<Image> imageSelection = new ArrayList<>();
 
     @FXML
     private BorderPane albumPane;
@@ -86,10 +88,10 @@ public class AlbumController {
             Image imageToDelete = imageService.getImageByFileName(imageName.getText());
             if (source.getStyle().equals("")) {
                 source.setStyle("-fx-border-style: solid; -fx-border-width: 3; -fx-border-color: blue;");
-                imagesToDelete.add(imageToDelete);
+                imageSelection.add(imageToDelete);
             } else {
                 source.setStyle(null);
-                imagesToDelete.remove(imageToDelete);
+                imageSelection.remove(imageToDelete);
             }
         });
 
@@ -152,19 +154,19 @@ public class AlbumController {
             for (Node child : imageGrid.getChildren()) {
                 child.setStyle(null);
             }
-            imagesToDelete.clear();
+            imageSelection.clear();
             return;
         }
-        if (imagesToDelete.isEmpty()) {
+        if (imageSelection.isEmpty()) {
             Alert info = new Alert(AlertType.INFORMATION);
             info.setTitle("Invalid selection");
             info.setContentText("No images where selected.");
             info.showAndWait();
-            imagesToDelete.clear();
+            imageSelection.clear();
             return;
         }
         int i = 0;
-        for (Image image : imagesToDelete) {
+        for (Image image : imageSelection) {
             imageService.deleteImage(image);
             i++;
         }
@@ -273,6 +275,38 @@ public class AlbumController {
             }
         }
 
+    }
+
+    @FXML
+    public void editImage() {
+        String title = "Invalid selection";
+        String content = "";
+        if (imageSelection.size() == 1) {
+            Image imageToEdit = imageSelection.get(0);
+            Scene scene = albumPane.getScene();
+
+            SceneController sceneController = new SceneController();
+            try {
+                sceneController.changeScene(scene, "image", imageToEdit);
+            } catch (IOException e) {
+                log.error(String.format("The image %s could not be edited: %s", imageToEdit.getFileName(), e.getMessage()));
+            } finally {
+                imageSelection.clear();
+            }
+        } else if (imageSelection.isEmpty()) {
+            content = "You need to select an image you want to edit.";
+            warnUser(title, content);
+        } else {
+            content = "Only one image at a time can be edited.";
+            warnUser(title, content);
+        }
+    }
+
+    private void warnUser(String title, String content) {
+        Alert info = new Alert(AlertType.WARNING);
+        info.setTitle(title);
+        info.setContentText(content);
+        info.showAndWait();
     }
 
     @FXML
