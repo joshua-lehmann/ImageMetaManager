@@ -112,7 +112,7 @@ public class AlbumController {
         ColumnConstraints col2 = new ColumnConstraints();
         col2.setPercentWidth(65.0);
         imageMetaPane.getColumnConstraints().add(col1);
-        imageMetaPane.getColumnConstraints().add(col1);
+        imageMetaPane.getColumnConstraints().add(col2);
 
         // Add an amount of descriptor labels to the grid based on the amount of the most important meta values
         createLabel(imageMetaPane, 0, "Attribute");
