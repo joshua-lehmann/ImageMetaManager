@@ -30,4 +30,9 @@ public class ImageController {
         javafx.scene.image.Image fxImage = new javafx.scene.image.Image(new File(image.getFullPath()).toURI().toString());
         imageView.setImage(fxImage);
     }
+
+    @FXML
+    public void exportImageValues() {
+        return;
+    }
 }
