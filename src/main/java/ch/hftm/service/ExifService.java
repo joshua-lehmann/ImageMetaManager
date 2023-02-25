@@ -8,13 +8,19 @@ import org.apache.commons.imaging.Imaging;
 import org.apache.commons.imaging.common.ImageMetadata;
 import org.apache.commons.imaging.formats.jpeg.JpegImageMetadata;
 import org.apache.commons.imaging.formats.tiff.TiffField;
+import org.apache.commons.imaging.formats.tiff.constants.ExifTagConstants;
 import org.apache.commons.imaging.formats.tiff.taginfos.TagInfo;
+import org.apache.commons.imaging.formats.tiff.taginfos.TagInfoAscii;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 @Slf4j
 public class ExifService {
+
+    private List<TagInfoAscii> tags = List.of(ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL, ExifTagConstants.EXIF_TAG_DATE_TIME_DIGITIZED, ExifTagConstants.EXIF_TAG_LENS_MAKE, ExifTagConstants.EXIF_TAG_LENS_MODEL);
+    private List<TagInfo> extendedTags = List.of(ExifTagConstants.EXIF_TAG_SOFTWARE, ExifTagConstants.EXIF_TAG_EXIF_IMAGE_WIDTH, ExifTagConstants.EXIF_TAG_EXIF_IMAGE_LENGTH);
 
     public Object getExifTag(Image image, TagInfo tagInfo) {
         try {
