@@ -6,6 +6,8 @@ import ch.hftm.service.AlbumService;
 import ch.hftm.service.ImageService;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -47,7 +49,8 @@ public class LibraryController implements Initializable {
         Label titleLabel = (Label) source.lookup("#albumTitle");
         Album album = albumService.getAlbumByName(titleLabel.getText());
         SceneController sceneController = new SceneController();
-        sceneController.changeScene(event, "album", album);
+        Scene scene = ((Node) event.getSource()).getScene();
+        sceneController.changeScene(scene, "album", album);
     }
 
     @FXML

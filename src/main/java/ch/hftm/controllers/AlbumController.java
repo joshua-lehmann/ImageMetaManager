@@ -1,6 +1,7 @@
 package ch.hftm.controllers;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -20,6 +21,7 @@ import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
@@ -39,11 +41,12 @@ public class AlbumController {
 
     public static final String STORAGE_DIRECTORY_JSON = System.getProperty("defaultDir-json", System.getenv("USERPROFILE") + "\\image-meta-manager\\defaultDir.json");
     private static final int ATTR_AMOUNT = 3; // Used to test dynamic attribute and value adding to imageGrid
-    private ImageService imageService;
     private static final String FALLBACK_DIR = System.getenv("USERPROFILE");
+    private static final String DEFAULT_TITLE = "Invalid Selection";
 
+    private ImageService imageService;
     private Album album;
-    private List<Image> imagesToDelete = new ArrayList<>();
+    private List<Image> imageSelection = new ArrayList<>();
 
     @FXML
     private BorderPane albumPane;
@@ -86,10 +89,10 @@ public class AlbumController {
             Image imageToDelete = imageService.getImageByFileName(imageName.getText());
             if (source.getStyle().equals("")) {
                 source.setStyle("-fx-border-style: solid; -fx-border-width: 3; -fx-border-color: blue;");
-                imagesToDelete.add(imageToDelete);
+                imageSelection.add(imageToDelete);
             } else {
                 source.setStyle(null);
-                imagesToDelete.remove(imageToDelete);
+                imageSelection.remove(imageToDelete);
             }
         });
 
@@ -110,7 +113,7 @@ public class AlbumController {
         ColumnConstraints col2 = new ColumnConstraints();
         col2.setPercentWidth(65.0);
         imageMetaPane.getColumnConstraints().add(col1);
-        imageMetaPane.getColumnConstraints().add(col1);
+        imageMetaPane.getColumnConstraints().add(col2);
 
         // Add an amount of descriptor labels to the grid based on the amount of the most important meta values
         createLabel(imageMetaPane, 0, "Attribute");
@@ -152,19 +155,16 @@ public class AlbumController {
             for (Node child : imageGrid.getChildren()) {
                 child.setStyle(null);
             }
-            imagesToDelete.clear();
+            imageSelection.clear();
             return;
         }
-        if (imagesToDelete.isEmpty()) {
-            Alert info = new Alert(AlertType.INFORMATION);
-            info.setTitle("Invalid selection");
-            info.setContentText("No images where selected.");
-            info.showAndWait();
-            imagesToDelete.clear();
+        if (imageSelection.isEmpty()) {
+            alertUser("", "No images were selected.", AlertType.WARNING);
+            imageSelection.clear();
             return;
         }
         int i = 0;
-        for (Image image : imagesToDelete) {
+        for (Image image : imageSelection) {
             imageService.deleteImage(image);
             i++;
         }
@@ -194,11 +194,9 @@ public class AlbumController {
             initializeAlbum();
             updateAlbumStatus(String.format("New image %s was added", newImage.getFileName()), 5_000);
         } else {
-            Alert info = new Alert(AlertType.INFORMATION);
-            info.setTitle("Invalid selection");
-            info.setContentText("No image can be added because no image was selected.");
-            info.showAndWait();
+            alertUser(DEFAULT_TITLE, "No image can be added because no image was selected.", AlertType.INFORMATION);
         }
+        imageSelection.clear();
     }
 
     private void writeDefaultDirectoryToJson(String directoryPath) {
@@ -273,6 +271,41 @@ public class AlbumController {
             }
         }
 
+    }
+
+    @FXML
+    public void editImage() {
+        String title = "";
+        String content = "";
+        if (imageSelection.size() == 1) {
+            Image imageToEdit = imageSelection.get(0);
+            Scene scene = albumPane.getScene();
+
+            SceneController sceneController = new SceneController();
+            try {
+                sceneController.changeScene(scene, "image", imageToEdit);
+            } catch (IOException e) {
+                log.error(String.format("The image %s could not be edited: %s", imageToEdit.getFileName(), e.getMessage()));
+            } finally {
+                imageSelection.clear();
+            }
+        } else if (imageSelection.isEmpty()) {
+            content = "You need to select an image you want to edit.";
+            alertUser(title, content, AlertType.WARNING);
+        } else {
+            content = "Only one image at a time can be edited.";
+            alertUser(title, content, AlertType.WARNING);
+        }
+    }
+
+    private void alertUser(String title, String content, AlertType alertType) {
+        if (title.equals("")) {
+            title = DEFAULT_TITLE;
+        }
+        Alert info = new Alert(alertType);
+        info.setTitle(title);
+        info.setContentText(content);
+        info.showAndWait();
     }
 
     @FXML
