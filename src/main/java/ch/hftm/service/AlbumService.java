@@ -69,6 +69,17 @@ public class AlbumService {
         return null;
     }
 
+    public Album getAlbumById(String id) {
+        for (Album album : getAllAlbums()) {
+            if (album.getId().equals(id)) {
+                return album;
+            }
+        }
+        log.warn("No album found with id {}", id);
+        // TODO: Replace with optionals
+        return null;
+    }
+
     public Album deleteAlbum(Album albumToRemove) {
         List<Album> existingAlbums = getAllAlbums();
         for (Album album : existingAlbums) {
