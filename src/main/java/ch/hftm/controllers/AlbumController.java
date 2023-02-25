@@ -196,6 +196,7 @@ public class AlbumController {
         } else {
             alertUser(DEFAULT_TITLE, "No image can be added because no image was selected.", AlertType.INFORMATION);
         }
+        imageSelection.clear();
     }
 
     private void writeDefaultDirectoryToJson(String directoryPath) {
