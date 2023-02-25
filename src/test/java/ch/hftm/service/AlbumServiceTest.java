@@ -11,8 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -68,5 +67,12 @@ class AlbumServiceTest {
     void getAlbumByNameNotFound() {
         Album deletedAlbum = albumService.getAlbumByName("xyz");
         assertNull(deletedAlbum);
+    }
+
+    @Test
+    @Order(5)
+    void getAlbumById() {
+        Album album = albumService.createAlbum("Test Album", "Test Album");
+        assertNotNull(albumService.getAlbumById(album.getId()));
     }
 }
