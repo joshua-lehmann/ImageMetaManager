@@ -14,12 +14,14 @@ public class SceneController {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(String.format("view/%s.fxml", sceneName)));
         Parent root = fxmlLoader.load();
 
-        var controller = fxmlLoader.getController();
-        if (controller instanceof AlbumController albumController && data instanceof ch.hftm.data.Album album) {
-            albumController.setAlbum(album);
-        } else if (controller instanceof ImageController imageController && data instanceof ch.hftm.data.Image image) {
-            imageController.setImage(image);
-        }
+        if (data != null) {
+            var controller = fxmlLoader.getController();
+            if (controller instanceof AlbumController albumController && data instanceof ch.hftm.data.Album album) {
+                albumController.setAlbum(album);
+            } else if (controller instanceof ImageController imageController && data instanceof ch.hftm.data.Image image) {
+                imageController.setImage(image);
+            }
+        } 
 
         Stage stage = (Stage) scene.getWindow();
         stage.setScene(new Scene(root));
