@@ -76,6 +76,16 @@ public class AlbumController {
         initializeAlbum();
     }
 
+    @FXML
+    public void goToLibrary() {
+        SceneController sceneController = new SceneController();
+        try {
+            sceneController.changeScene(albumPane.getScene(), "library", null);
+        } catch (IOException e) {
+            log.error("Scene change failed: ", e.getMessage());
+        }
+    }
+
     /**
      * Create a pane to display an image including the meta attribut descriptors and values
      */
