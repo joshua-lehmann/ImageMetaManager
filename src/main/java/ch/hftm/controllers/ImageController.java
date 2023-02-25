@@ -1,8 +1,10 @@
 package ch.hftm.controllers;
 
 import java.io.File;
+import java.io.IOException;
 
 import ch.hftm.data.Image;
+import ch.hftm.service.AlbumService;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.scene.control.Label;
@@ -10,7 +12,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class ImageController {
     
     private static final int ATTR_AMOUNT = 5; // Used to test dynamic attribute and value adding to imageMetaPane
@@ -27,11 +31,22 @@ public class ImageController {
     private BorderPane metaBorderPane;
     
     public void setImage(Image image) {
-        this.image = image;
         if (image == null) {
             return;
         }
+        this.image = image;
         initializeImage();
+    }
+
+    @FXML
+    public void goToAlbum() {
+        SceneController sceneController = new SceneController();
+        try {
+            AlbumService albumService = new AlbumService();
+            sceneController.changeScene(metaBorderPane.getScene(), "album", albumService.getAlbumById(image.getAlbumId()));
+        } catch (IOException e) {
+            log.error("Scene change failed: ", e.getMessage());
+        }
     }
 
     private void initializeImage() {

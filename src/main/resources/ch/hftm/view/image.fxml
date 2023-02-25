@@ -16,7 +16,7 @@
                <children>
                   <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#exportImageValues" text="Export" />
+                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#goToAlbum" text="Album" />
                      </children>
                      <HBox.margin>
                         <Insets left="20.0" />
