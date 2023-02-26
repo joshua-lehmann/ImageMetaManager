@@ -30,7 +30,7 @@
                </opaqueInsets>
                <children>
                   <Pane fx:id="albumContainer" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#onAlbumClick"
-                        prefHeight="110.0" prefWidth="250.0" style="-fx-border-color: black;">
+                        prefHeight="110.0" prefWidth="250.0">
                      <children>
                         <ImageView fx:id="albumImage" fitHeight="110.0" fitWidth="250.0" layoutY="-2.0"
                                    pickOnBounds="true" preserveRatio="true" visible="false"/>
