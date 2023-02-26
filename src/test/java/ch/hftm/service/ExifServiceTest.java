@@ -37,9 +37,7 @@ class ExifServiceTest {
     @Test
     void getExifTags() {
         Album newAlbum = albumService.createAlbum("Test", "Test Album");
-        imageService.createImage(new File("src/test/resources/DSCN0012.jpg"), newAlbum);
-        imageService.createImage(new File("src/test/resources/DSCN0021.jpg"), newAlbum);
-        Image image = imageService.createImage(new File("src/test/resources/DSCN0010.jpg"), newAlbum);
+        Image image = imageService.createImage(new File("src/main/resources/images/DSCN0010.jpg"), newAlbum);
         Map<String, Object> tags = exifService.getExifTags(image, false);
         String dateTaken = tags.get("Date taken").toString();
         String cameraMake = tags.get("Camera Make").toString();
@@ -52,7 +50,7 @@ class ExifServiceTest {
     @Test
     void getExtendedExifTags() {
         Album newAlbum = albumService.createAlbum("Test", "Test Album");
-        Image image = imageService.createImage(new File("src/test/resources/DSCN0010.jpg"), newAlbum);
+        Image image = imageService.createImage(new File("src/main/resources/images/DSCN0010.jpg"), newAlbum);
         Map<String, Object> tags = exifService.getExifTags(image, true);
         String programm = tags.get("Programm").toString();
         String length = tags.get("Length").toString();
@@ -68,9 +66,9 @@ class ExifServiceTest {
         try {
             // To be able to run the test multiple times we create a copy of the original image and modify and check the exif data there
             // So the original image keeps its original exif data
-            File testFile = new File("src/test/resources/DSCN0021-test.jpg");
-            FileUtils.copyFile(new File("src/test/resources/DSCN0021.jpg"), testFile, true);
-            Image image = imageService.createImage(new File("src/test/resources/DSCN0021-test.jpg"), newAlbum);
+            File testFile = new File("src/main/resources/images/DSCN0021-test.jpg");
+            FileUtils.copyFile(new File("src/main/resources/images/DSCN0021.jpg"), testFile, true);
+            Image image = imageService.createImage(new File("src/main/resources/images/DSCN0021-test.jpg"), newAlbum);
             Map<String, Object> tagsToUpdate = exifService.getExifTags(image, true);
             tagsToUpdate.replace("Date taken", "2022:01:01 16:16:16");
             tagsToUpdate.replace("Width", Short.valueOf("800"));
@@ -80,7 +78,7 @@ class ExifServiceTest {
             assertEquals("800", newTags.get("Width").toString());
             FileUtils.delete(testFile);
         } catch (IOException e) {
-            log.error("Could not create copy for test image:{} {}", "src/test/resources/DSCN0021.jpg", e.getMessage());
+            log.error("Could not create copy for test image:{} {}", "src/main/resources/images/DSCN0021.jpg", e.getMessage());
         }
 
     }

@@ -1,6 +1,7 @@
 package ch.hftm.service;
 
 import ch.hftm.data.Album;
+import ch.hftm.interfaces.JsonPersisting;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-public class AlbumService {
+public class AlbumService implements JsonPersisting<Album> {
 
     public static final String STORAGE_ALBUMS_JSON = System.getProperty("albums-json", System.getenv("USERPROFILE") + "\\image-meta-manager\\albums.json");
 
@@ -39,7 +40,7 @@ public class AlbumService {
         List<Album> existingAlbums = getAllAlbums();
         Album album = new Album(name, description);
         existingAlbums.add(album);
-        writeAlbumsToJson(existingAlbums);
+        writeDataToJson(existingAlbums);
         return album;
     }
 
@@ -65,7 +66,6 @@ public class AlbumService {
             }
         }
         log.warn("No album found with name {}", name);
-        // TODO: Replace with optionals
         return null;
     }
 
@@ -76,7 +76,6 @@ public class AlbumService {
             }
         }
         log.warn("No album found with id {}", id);
-        // TODO: Replace with optionals
         return null;
     }
 
@@ -85,12 +84,11 @@ public class AlbumService {
         for (Album album : existingAlbums) {
             if (album.equals(albumToRemove)) {
                 existingAlbums.remove(album);
-                writeAlbumsToJson(existingAlbums);
+                writeDataToJson(existingAlbums);
                 return album;
             }
         }
         log.warn("No album found with name {}", albumToRemove.getName());
-        // TODO: Replace with optionals
         return null;
     }
 
@@ -104,20 +102,21 @@ public class AlbumService {
         }
         ImageService imageService = new ImageService();
         Album album = createAlbum("Sample Album", "Album with one image");
-        imageService.createImage(new File("src/test/resources/DSCN0010.jpg"), album);
+        imageService.createImage(new File("src/main/resources/images/DSCN0010.jpg"), album);
         Album album2 = createAlbum("Multi Image Sample", "Album with two images");
-        imageService.createImage(new File("src/test/resources/DSCN0021.jpg"), album2);
-        imageService.createImage(new File("src/test/resources/DSCN0012.jpg"), album2);
+        imageService.createImage(new File("src/main/resources/images/DSCN0021.jpg"), album2);
+        imageService.createImage(new File("src/main/resources/images/DSCN0012.jpg"), album2);
     }
 
-    private void writeAlbumsToJson(List<Album> existingAlbums) {
+    @Override
+    public void writeDataToJson(List<Album> data) {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
         DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm");
         objectMapper.setDateFormat(df);
         try {
             File storageFile = new File(STORAGE_ALBUMS_JSON);
-            objectMapper.writeValue(storageFile, existingAlbums);
+            objectMapper.writeValue(storageFile, data);
         } catch (IOException e) {
             log.error("Could not write album to file:{} {}", STORAGE_ALBUMS_JSON, e.getMessage());
         }

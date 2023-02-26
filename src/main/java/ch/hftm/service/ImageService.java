@@ -2,6 +2,7 @@ package ch.hftm.service;
 
 import ch.hftm.data.Album;
 import ch.hftm.data.Image;
+import ch.hftm.interfaces.JsonPersisting;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -16,7 +17,7 @@ import java.util.List;
 
 
 @Slf4j
-public class ImageService {
+public class ImageService implements JsonPersisting<Image> {
 
     public static final String STORAGE_IMAGES_JSON = System.getProperty("images-json", System.getenv("USERPROFILE") + "\\image-meta-manager\\images.json");
 
@@ -40,7 +41,7 @@ public class ImageService {
         Image image = new Image(file, album.getId());
         List<Image> existingImages = getAllImages();
         existingImages.add(image);
-        writeImagesToJson(existingImages);
+        writeDataToJson(existingImages);
         return image;
     }
 
@@ -74,7 +75,6 @@ public class ImageService {
             }
         }
         log.warn("No image found with name {}", fileName);
-        // TODO: Replace with optionals
         return null;
     }
 
@@ -84,21 +84,21 @@ public class ImageService {
             if (existingImage.equals(imageToRemove)) {
                 existingImages.remove(existingImage);
                 log.info("Image {} deleted", imageToRemove.getFileName());
-                writeImagesToJson(existingImages);
+                writeDataToJson(existingImages);
                 return imageToRemove;
             }
         }
         log.warn("Image {} could not be deleted because it was not found", imageToRemove.getFileName());
-        // TODO: Replace with optionals
         return null;
     }
 
-    private static void writeImagesToJson(List<Image> newImages) {
+    @Override
+    public void writeDataToJson(List<Image> data) {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
         try {
             File storageFile = new File(STORAGE_IMAGES_JSON);
-            objectMapper.writeValue(storageFile, newImages);
+            objectMapper.writeValue(storageFile, data);
         } catch (Exception e) {
             log.error("Could not write images to file: {} {}", STORAGE_IMAGES_JSON, e.getMessage());
         }
