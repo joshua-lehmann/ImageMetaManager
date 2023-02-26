@@ -37,10 +37,8 @@ class ExifServiceTest {
     @Test
     void getExifTags() {
         Album newAlbum = albumService.createAlbum("Test", "Test Album");
-        imageService.createImage(new File("src/test/resources/DSCN0012.jpg"), newAlbum);
-        imageService.createImage(new File("src/test/resources/DSCN0021.jpg"), newAlbum);
-        Image image = imageService.createImage(new File("src/test/resources/DSCN0010.jpg"), newAlbum);
-        Map<String, Object> tags = exifService.getExifTags(image, false);
+        Image image = imageService.createImage(new File("src/main/resources/images/DSCN0010.jpg"), newAlbum);
+        Map<String, Object> tags = exifService.getTags(image, false);
         String dateTaken = tags.get("Date taken").toString();
         String cameraMake = tags.get("Camera Make").toString();
         String cameraModel = tags.get("Camera Model").toString();
@@ -52,8 +50,8 @@ class ExifServiceTest {
     @Test
     void getExtendedExifTags() {
         Album newAlbum = albumService.createAlbum("Test", "Test Album");
-        Image image = imageService.createImage(new File("src/test/resources/DSCN0010.jpg"), newAlbum);
-        Map<String, Object> tags = exifService.getExifTags(image, true);
+        Image image = imageService.createImage(new File("src/main/resources/images/DSCN0010.jpg"), newAlbum);
+        Map<String, Object> tags = exifService.getTags(image, true);
         String programm = tags.get("Programm").toString();
         String length = tags.get("Length").toString();
         String width = tags.get("Width").toString();
