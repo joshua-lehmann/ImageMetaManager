@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import ch.hftm.data.Image;
 import ch.hftm.service.AlbumService;
+import ch.hftm.service.ExifService;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.scene.control.Label;
@@ -19,6 +20,7 @@ public class ImageController {
     
     private static final int ATTR_AMOUNT = 5; // Used to test dynamic attribute and value adding to imageMetaPane
 
+    private ExifService exifService;
     private Image image;
 
     @FXML
@@ -79,5 +81,10 @@ public class ImageController {
             label.setVisible(true);
             pane.add(label, column, i);
         }
+    }
+
+    @FXML
+    public void initialize() {
+        exifService = new ExifService();
     }
 }
