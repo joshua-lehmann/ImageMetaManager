@@ -187,7 +187,6 @@ public class AlbumController {
 
     @FXML
     public void addImage() {
-        // TODO: Check which image file formats should be supported
         // Create a FileChooser in the default directory and only show files of the type jpg, png
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(getDefaultDirectory());
