@@ -1,11 +1,23 @@
 package ch.hftm.controllers;
 
-import ch.hftm.data.Album;
-import ch.hftm.data.Image;
-import ch.hftm.service.ImageService;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+
+import ch.hftm.data.Album;
+import ch.hftm.data.Image;
+import ch.hftm.service.ExifService;
+import ch.hftm.service.ImageService;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
@@ -25,25 +37,16 @@ import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 
 @Slf4j
 public class AlbumController {
 
     public static final String STORAGE_DIRECTORY_JSON = System.getProperty("defaultDir-json", System.getenv("USERPROFILE") + "\\image-meta-manager\\defaultDir.json");
-    private static final int ATTR_AMOUNT = 3; // Used to test dynamic attribute and value adding to imageGrid
     private static final String FALLBACK_DIR = System.getenv("USERPROFILE");
     private static final String DEFAULT_TITLE = "Invalid Selection";
 
     private ImageService imageService;
+    private ExifService exifService;
 
     private Album album;
     private List<Image> imageSelection = new ArrayList<>();
@@ -125,11 +128,13 @@ public class AlbumController {
         imageMetaPane.getColumnConstraints().add(col1);
         imageMetaPane.getColumnConstraints().add(col2);
 
-        // Add an amount of descriptor labels to the grid based on the amount of the most important meta values
-        createLabel(imageMetaPane, 0, "Attribute");
-
-        // Add an amount of value labels to the grid based on the amount of the most important meta value
-        createLabel(imageMetaPane, 1, "Value");
+        Map<String, Object> imageTags = exifService.getTags(image, false);
+        
+        int row = 0;
+        for (Map.Entry<String, Object> entry : imageTags.entrySet()) {
+            createLabel(imageMetaPane, 0, row, entry.getKey() + ":");
+            createLabel(imageMetaPane, 1, row++, entry.getValue().toString());
+        }
 
         BorderPane imageBorderPane = new BorderPane();
         imageBorderPane.setTop(imageView);
@@ -142,13 +147,11 @@ public class AlbumController {
         return imagePane;
     }
 
-    private void createLabel(GridPane pane, int column, String labelText) {
-        for (int i = 0; i < ATTR_AMOUNT; i++) {
-            Label label = new Label();
-            label.setText(String.format("%s %d:", labelText, i));
-            label.setVisible(true);
-            pane.add(label, column, i);
-        }
+    private void createLabel(GridPane pane, int column, int row, String labelText) {
+        Label label = new Label();
+        label.setText(labelText);
+        label.setVisible(true);
+        pane.add(label, column, row);
     }
 
     @FXML
@@ -321,6 +324,7 @@ public class AlbumController {
     @FXML
     public void initialize() {
         imageService = new ImageService();
+        exifService = new ExifService();
     }
 
 }
