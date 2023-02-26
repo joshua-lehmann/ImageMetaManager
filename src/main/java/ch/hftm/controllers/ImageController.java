@@ -80,10 +80,4 @@ public class ImageController {
             pane.add(label, column, i);
         }
     }
-
-    @FXML
-    public void exportImageValues() {
-        // TODO: Add functionality to export exif values of current image
-        return;
-    }
 }
