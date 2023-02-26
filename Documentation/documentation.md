@@ -9,7 +9,7 @@ Damit die Daten persistieren, werden die Daten in JSON-Dateien unter folgenden P
 
 ### Bibliothek-View
 Die Startseite ist die Bibliothek wo alle vorhanden Alben ersichtlich sind.  
-In der Bibliothek können neue Alben erstellt werden oder vorhanden Alben bearbeitet werden.  
+In der Bibliothek können neue Alben erstellt werden, indem ein Albumtitel und eine -beschreibung vergeben werden. Auch können vorhande Alben bearbeitet werden.  
 Durch Klicken auf ein Album wechselt man zum Album-View.
 ![Library View](./images/library-view.JPG)
 
@@ -24,6 +24,8 @@ Durch den `Add`-Button kann man ein neues Bild hinzufügen.
 Nach dem Hinzufügen wird das Album-View aktualisiert, um alle Bilder anzuzeigen und der Pfad woher das Bild geladen wurde, wird persistend gespeichert. Damit wird das nächste Mal wenn ein Bild hinzugefügt wird automatisch der zuletzt verwendete Pfad zum Hinzufügen eines Bilds verwendet.
 
 Durch Klicken auf die Bilder kann man diese auswählen und anschliessend über den `Delete`-Button löschen oder über den `Edit`-Button bearbeiten (wechsel zum Image-View).
+
+Ausgewählte Bilder werden mit einem blauen Rand markiert, damit der Benutzer weiss, welche Bilder zurzeit ausgewählt sind.
 
 Über den `Library`-Button kommt man zurück in die Bibliothek (Library).
 ![Album View](./images/album-view.JPG)
@@ -61,20 +63,26 @@ Für jeden Service gibt es einge dazugehörige Testklasse, welche die Methoden d
 Die Code Coverage sowie Code Smells und Sicherheitsprobleme werden dabei von SonarCloud überprüft.
 
 ### Enums
-Wir haben keine eigene Enums erstellt, verwendet jedoch Enums von anderen Paketen. Beispielsweise im ExifService um die relevaten Exif- und Tiff-Tags auszulesen, in den Controllern um den AlertType festzulegen oder im ImageController um die horizontale Ausrichtung zu definieren.
+Wir haben keine eigene Enums erstellt, verwenden jedoch Enums von anderen Paketen. Beispielsweise im ExifService um die relevaten Exif- und Tiff-Tags auszulesen, in den Controllern um den AlertType festzulegen oder im ImageController um die horizontale Ausrichtung zu definieren.
 
 ### Casting
 Im SceneController casten wir bspw. das Window der momentanen Scene in eine Stage, um anschliessend die Scene zu wechseln.  
-Auch casten wir in den Controllen diverse JavaFX-Klassen, damit wir die richtigen Typen verwenden.
+Auch casten wir in den Controllen diverse JavaFX-Klassen, damit wir die richtigen Typen verwenden, wenn wir die jeweilige View über den SceneController initialisieren.
 
 ### Interfaces
+Wir verwenden das Initializable Interface um den LibraryController zu initialisieren.
 
 ### Generics
+Wir verwenden im SceneController Generics um bei einem Scenewechsel verschiedene Datentypen zu übergeben. Dadurch können wir in den Album- und Image-Views die richtigen Daten anzeigen.
 
 ### Collections
+Im ExifService verwenden wir eine Map um die Exif- und Tiff-Tags und deren Beschreibung als Key-Value-Pair zu speichern. Dabei dient die Beschreibung als Schlüssel/Key.
 
 ### Serialisierung
+Im AlbumService, ImageService und AlbumController verwenden wir das FasterXML Jackson Core Paket um die Album- und Image-Klassen, wie auch der zuletzt verwendete Dateipfad in JSON zu serialisieren. Dadurch werden die oben erwähnten Daten persistent gespeichert.
 
 ### Exceptions
+Wir fangen in den Services und Controllern bewusst die Exceptions ab, um allfällige Fehler mit SLF4J zu loggen und somit Fehlerquellen besser einzugrenzen.
 
 ### Maven Build-Prozess
+Im Package-Lebenszyklus von Maven erzeugen wir ein ausführbares JAR-File.
