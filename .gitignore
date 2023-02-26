@@ -1,5 +1,6 @@
 ### Project files ###
 /src/main/resources/application-pwd.yml
+/logs
 
 target/
 !.mvn/wrapper/maven-wrapper.jar
@@ -23,5 +24,7 @@ target/
 
 ### VS Code ###
 .vscode/
+/.vscode/
 
 
+/src/test/resources/storage/

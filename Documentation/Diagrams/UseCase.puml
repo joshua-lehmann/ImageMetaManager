@@ -1,0 +1,27 @@
+@startuml useCaseDiagram
+'https://plantuml.com/use-case-diagram
+
+left to right direction
+
+:User:
+
+package Album {
+User --> (Album erstellen)
+User --> (Album loeschen)
+User --> (Album anzeigen)
+}
+
+package Bilder {
+User --> (Bilder uploaden)
+User --> (Bild loeschen)
+}
+
+package Metadaten {
+User --> (Metadaten anzeigen)
+(Metadaten bearbeiten) .> (Metadaten anzeigen) : extends
+User --> (Metadaten speichern)
+}
+
+User --> (Statusbar anzeigen)
+
+@enduml
