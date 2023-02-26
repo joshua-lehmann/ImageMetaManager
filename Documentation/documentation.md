@@ -11,6 +11,7 @@ Damit die Daten persistieren, werden die Daten in JSON-Dateien unter folgenden P
 Die Startseite ist die Bibliothek wo alle vorhanden Alben ersichtlich sind.  
 In der Bibliothek können neue Alben erstellt werden oder vorhanden Alben bearbeitet werden.  
 Durch Klicken auf ein Album wechselt man zum Album-View.
+![Library View](./images/library-view.JPG)
 
 ### Album-View
 In einem Album werden die verschieden Bilder die Teil eines Albums sind angezeigt.
@@ -22,12 +23,14 @@ Zusätzlich werden die folgenden drei Exif/Tiff-Tags zu jedem Bild aufgelistet:
 Durch den `Add`-Button kann man ein neues Bild hinzufügen.
 Nach dem Hinzufügen wird das Album-View aktualisiert, um alle Bilder anzuzeigen und der Pfad woher das Bild geladen wurde, wird persistend gespeichert. Damit wird das nächste Mal wenn ein Bild hinzugefügt wird automatisch der zuletzt verwendete Pfad zum Hinzufügen eines Bilds verwendet.
 
-Durch Klicken auf die Bilder kann man diese auswählen und anschliessend über den `Delete`-Button löschen oder über den `Edit`-Button bearbeiten (wechsel zum Edit-View).
+Durch Klicken auf die Bilder kann man diese auswählen und anschliessend über den `Delete`-Button löschen oder über den `Edit`-Button bearbeiten (wechsel zum Image-View).
 
 Über den `Library`-Button kommt man zurück in die Bibliothek (Library).
+![Album View](./images/album-view.JPG)
+![Image Selection in Album](./images/select-images.JPG)
 
-### Edit-View
-Im Edit-View wird das Bild grösser dargestellt und es werden die folgenden Exif/Tiff-Tags angezeigt:
+### Image-View
+Im Image-View wird das Bild grösser dargestellt und es werden die folgenden Exif/Tiff-Tags angezeigt:
 - DateTimeOriginal: das Datum, an welchem das Bild aufgenommen wurde
 - Make: Kamerahersteller und
 - Model: Kameramodell (Name oder Nummer)
@@ -36,6 +39,7 @@ Im Edit-View wird das Bild grösser dargestellt und es werden die folgenden Exif
 - ExifImageLength: Die Bildhöhe in Pixel.
 
 Über den `Album`-Button kommt man zurück in das Album.
+![Image View](./images/image-view.JPG)
 
 ## Umsetzung
 Nachfolgend ist grob die Reihenfolge der Umsetzung aufgelistet:
@@ -48,7 +52,7 @@ Die beiden Services implementieren die Logik um die jeweilge Klasse zu verwalten
 
 - Erstellen des AlbumController, welcher die Album-View - Anzeige alle vorhandenen Bilder eines Albums - implementiert.
 
-- Erstellen des ImageController, welcher die Edit-View - detaillierte Anzeige der Metadaten eines Bilds - implementiert.
+- Erstellen des ImageController, welcher die Image-View - detaillierte Anzeige der Metadaten eines Bilds - implementiert.
 
 - Erstellen des ExifService, welcher Metadaten aus den Bildern ausliest.
 
