@@ -1,21 +1,11 @@
 package ch.hftm.controllers;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-
 import ch.hftm.data.Album;
 import ch.hftm.data.Image;
 import ch.hftm.service.ImageService;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
@@ -35,6 +25,15 @@ import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 
 @Slf4j
 public class AlbumController {
@@ -45,6 +44,7 @@ public class AlbumController {
     private static final String DEFAULT_TITLE = "Invalid Selection";
 
     private ImageService imageService;
+
     private Album album;
     private List<Image> imageSelection = new ArrayList<>();
 

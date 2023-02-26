@@ -14,6 +14,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -83,6 +84,6 @@ class ImageServiceTest {
     @Order(5)
     void getImageByFileNameNotFound() {
         Image image = imageService.getImageByFileName("testxyz.jpg");
-        assertEquals(null, image);
+        assertNull(image);
     }
 }
