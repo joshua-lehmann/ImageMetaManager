@@ -1,15 +1,8 @@
 package ch.hftm.controllers;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Map;
-
 import ch.hftm.data.Image;
 import ch.hftm.service.AlbumService;
 import ch.hftm.service.ExifService;
-import javafx.event.ActionEvent;
-import ch.hftm.service.ExifService;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.scene.control.Button;
@@ -20,21 +13,19 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.imaging.formats.tiff.taginfos.TagInfo;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
 public class ImageController {
-    
+
+    public static final String META_LABEL = "MetaLabel";
     private ExifService exifService;
     private Image image;
     private boolean editMode = false;
-
-    @FXML
-    private Label imageName;
 
     @FXML
     private ImageView imageView;
@@ -63,7 +54,7 @@ public class ImageController {
             AlbumService albumService = new AlbumService();
             sceneController.changeScene(metaBorderPane.getScene(), "album", albumService.getAlbumById(image.getAlbumId()));
         } catch (IOException e) {
-            log.error("Scene change failed: ", e.getMessage());
+            log.error("Scene change failed: {}", e.getMessage());
         }
     }
 
@@ -87,13 +78,10 @@ public class ImageController {
 
         Map<String, Object> imageTags = exifService.getExifTags(image, true);
 
-
-        Map<String, Object> imageTags = exifService.getExifTags(image, true);
-
         for (Map.Entry<String, Object> entry : imageTags.entrySet()) {
             createLabel(this.imageMetaPane, 0, row, entry.getKey(), "metaNameLabel");
-            createTexField(this.imageMetaPane, 1, row, entry.getValue().toString(), entry.getKey() + "Value");
-            createLabel(this.imageMetaPane, 1, row++, entry.getValue().toString(), "metaValueLabel");
+            createTexField(this.imageMetaPane, 1, row, entry.getValue().toString(), entry.getKey().replace(" ", "-"));
+            createLabel(this.imageMetaPane, 1, row++, entry.getValue().toString(), entry.getKey().replace(" ", "-") + META_LABEL);
         }
 
         metaBorderPane.setCenter(this.imageMetaPane);
@@ -117,31 +105,37 @@ public class ImageController {
     }
 
     @FXML
-    void editTags(ActionEvent event) {
+    void editTags() {
         this.editMode = !this.editMode;
-        if (this.editMode) {
-            editTagButton.setText("Save Tags");
-        } else {
-            editTagButton.setText("Edit Tags");
-        }
         this.imageMetaPane.getChildren().forEach(node -> {
-            if (node instanceof Label label) {
-                if (label.getId().equals("metaValueLabel")) {
-                    label.setVisible(!this.editMode);
-                }
+            if (node instanceof Label label && label.getId().contains(META_LABEL)) {
+                label.setVisible(!this.editMode);
+                String newValue = ((TextField) this.imageMetaPane.lookup("#" + label.getId().replace(META_LABEL, ""))).getText();
+                label.setText(newValue);
             }
             if (node instanceof TextField textField) {
                 textField.setVisible(this.editMode);
             }
         });
-        Map<String, Object> currentTags = exifService.getExifTags(image, true);
-        for (Map.Entry<String, Object> entry : currentTags.entrySet()) {
-            TextField textField = (TextField) this.imageMetaPane.lookup("#" + entry.getKey() + "Value");
-            TagInfo tag = ExifService.extendedTags.get(entry.getKey());
-            if (textField != null && tag != null) {
-                exifService.updateExifTag(image, tag, textField.getText());
-            }
+        if (this.editMode) {
+            editTagButton.setText("Save Tags");
+        } else {
+            Map<String, Object> newTags = new HashMap<>();
+
+            this.imageMetaPane.getChildren().forEach(node -> {
+                if (node instanceof TextField textField) {
+                    newTags.put(textField.getId().replace("-", " "), textField.getText());
+                }
+            });
+
+            exifService.updateExifTags(image, newTags);
+            editTagButton.setText("Edit Tags");
         }
+
+
+    }
+
+    @FXML
     public void initialize() {
         exifService = new ExifService();
     }

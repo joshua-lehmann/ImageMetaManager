@@ -1,23 +1,12 @@
 package ch.hftm.controllers;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-
 import ch.hftm.data.Album;
 import ch.hftm.data.Image;
 import ch.hftm.service.ExifService;
 import ch.hftm.service.ImageService;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
@@ -37,6 +26,16 @@ import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 
 @Slf4j
 public class AlbumController {
@@ -49,7 +48,7 @@ public class AlbumController {
     private ExifService exifService;
 
     private Album album;
-    private List<Image> imageSelection = new ArrayList<>();
+    private final List<Image> imageSelection = new ArrayList<>();
 
     @FXML
     private BorderPane albumPane;
@@ -85,7 +84,7 @@ public class AlbumController {
         try {
             sceneController.changeScene(albumPane.getScene(), "library", null);
         } catch (IOException e) {
-            log.error("Scene change failed: ", e.getMessage());
+            log.error("Scene change failed: {}", e.getMessage());
         }
     }
 
@@ -128,7 +127,7 @@ public class AlbumController {
         imageMetaPane.getColumnConstraints().add(col1);
         imageMetaPane.getColumnConstraints().add(col2);
 
-        Map<String, Object> imageTags = exifService.getTags(image, false);
+        Map<String, Object> imageTags = exifService.getExifTags(image, false);
         
         int row = 0;
         for (Map.Entry<String, Object> entry : imageTags.entrySet()) {
@@ -288,7 +287,7 @@ public class AlbumController {
     @FXML
     public void editImage() {
         String title = "";
-        String content = "";
+        String content;
         if (imageSelection.size() == 1) {
             Image imageToEdit = imageSelection.get(0);
             Scene scene = albumPane.getScene();

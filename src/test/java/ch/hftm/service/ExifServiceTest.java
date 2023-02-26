@@ -3,7 +3,6 @@ package ch.hftm.service;
 import ch.hftm.data.Album;
 import ch.hftm.data.Image;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.imaging.formats.tiff.constants.ExifTagConstants;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -64,16 +63,18 @@ class ExifServiceTest {
     }
 
     @Test
-    void updateExifTag() {
+    void updateExifTags() {
         Album newAlbum = albumService.createAlbum("Test", "Test Album");
-        // To be able to run the test multiple times we create a copy of the original image and modify and check the exif data there
-        // So the original image keeps its original exif data
         try {
+            // To be able to run the test multiple times we create a copy of the original image and modify and check the exif data there
+            // So the original image keeps its original exif data
             File testFile = new File("src/test/resources/DSCN0021-test.jpg");
             FileUtils.copyFile(new File("src/test/resources/DSCN0021.jpg"), testFile, true);
             Image image = imageService.createImage(new File("src/test/resources/DSCN0021-test.jpg"), newAlbum);
-            exifService.updateExifTag(image, ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL, "2022:01:01 16:16:16");
-            exifService.updateExifTag(image, ExifTagConstants.EXIF_TAG_EXIF_IMAGE_WIDTH, Short.valueOf("800"));
+            Map<String, Object> tagsToUpdate = exifService.getExifTags(image, true);
+            tagsToUpdate.replace("Date taken", "2022:01:01 16:16:16");
+            tagsToUpdate.replace("Width", Short.valueOf("800"));
+            exifService.updateExifTags(image, tagsToUpdate);
             Map<String, Object> newTags = exifService.getExifTags(image, true);
             assertEquals("2022:01:01 16:16:16", newTags.get("Date taken").toString());
             assertEquals("800", newTags.get("Width").toString());

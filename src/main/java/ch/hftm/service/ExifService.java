@@ -28,11 +28,11 @@ import java.util.stream.Stream;
 @Slf4j
 public class ExifService {
 
-    public final static Map<String, TagInfo> tags = Map.of(
+    public static final Map<String, TagInfo> tags = Map.of(
             "Date taken", ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL,
             "Camera Make", TiffTagConstants.TIFF_TAG_MAKE,
             "Camera Model", TiffTagConstants.TIFF_TAG_MODEL);
-    public final static Map<String, TagInfo> extendedTags = Stream.concat(Map.of(
+    protected static final Map<String, TagInfo> extendedTags = Stream.concat(Map.of(
                     "Programm", TiffTagConstants.TIFF_TAG_SOFTWARE,
                     "Width", ExifTagConstants.EXIF_TAG_EXIF_IMAGE_WIDTH,
                     "Length", ExifTagConstants.EXIF_TAG_EXIF_IMAGE_LENGTH).entrySet().stream(),
@@ -67,7 +67,8 @@ public class ExifService {
         return exifData;
     }
 
-    public <T extends TagInfo> void updateExifTag(Image image, T tag, Object value) {
+
+    public void updateExifTags(Image image, Map<String, Object> newTags) {
         File tempFile = new File(image.getFullPath() + ".tmp");
         try (FileOutputStream fos = new FileOutputStream(tempFile); OutputStream os = new BufferedOutputStream(fos)) {
             File imageFile = new File(image.getFullPath());
@@ -82,14 +83,18 @@ public class ExifService {
                     // if we don't have existing EXIF metadata, we create an empty set of EXIF metadata.
                     outputSet = new TiffOutputSet();
                 }
-
                 final TiffOutputDirectory exifDirectory = outputSet.getOrCreateExifDirectory();
-                // make sure to remove old value if present (this method will not fail if the tag does not exist).
-                exifDirectory.removeField(tag);
+                for (Map.Entry<String, Object> newTag : newTags.entrySet()) {
+                    TagInfo tag = ExifService.extendedTags.get(newTag.getKey());
+                    // make sure to remove old value if present (this method will not fail if the tag does not exist).
+                    exifDirectory.removeField(tag);
+                    if (tag instanceof TagInfoAscii asciiTag) {
+                        exifDirectory.add(asciiTag, newTag.getValue().toString());
+                    } else if (tag instanceof TagInfoShort shortTag) {
+                        exifDirectory.add(shortTag, Short.parseShort(newTag.getValue().toString()));
+                    }
+                }
 
-                if (tag instanceof TagInfoAscii asciiTag) exifDirectory.add(asciiTag, value.toString());
-                else if (tag instanceof TagInfoShort shortTag)
-                    exifDirectory.add(shortTag, Short.parseShort(value.toString()));
 
                 new ExifRewriter().updateExifMetadataLossless(imageFile, os, outputSet);
                 // Somehow overwriting the original file with new tags does not work, so we copy the new file to the original file
