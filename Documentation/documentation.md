@@ -10,6 +10,7 @@ Damit die Daten persistieren, werden die Daten in JSON-Dateien unter folgenden P
 ### Bibliothek-View
 Die Startseite ist die Bibliothek wo alle vorhanden Alben ersichtlich sind.  
 In der Bibliothek können neue Alben erstellt werden, indem ein Albumtitel und eine -beschreibung vergeben werden. Auch können vorhande Alben bearbeitet werden.  
+Die Bibliothek kann max. 20 Alben enthalten.
 Durch Klicken auf ein Album wechselt man zum Album-View.
 ![Library View](./images/library-view.JPG)
 
@@ -26,6 +27,8 @@ Nach dem Hinzufügen wird das Album-View aktualisiert, um alle Bilder anzuzeigen
 Durch Klicken auf die Bilder kann man diese auswählen und anschliessend über den `Delete`-Button löschen oder über den `Edit`-Button bearbeiten (wechsel zum Image-View).
 
 Ausgewählte Bilder werden mit einem blauen Rand markiert, damit der Benutzer weiss, welche Bilder zurzeit ausgewählt sind.
+
+Ein Album kann maximal 6 Bilder beinhalten.
 
 Über den `Library`-Button kommt man zurück in die Bibliothek (Library).
 ![Album View](./images/album-view.JPG)
