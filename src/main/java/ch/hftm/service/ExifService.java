@@ -28,11 +28,11 @@ import java.util.stream.Stream;
 @Slf4j
 public class ExifService {
 
-    private final Map<String, TagInfo> tags = Map.of(
+    public final static Map<String, TagInfo> tags = Map.of(
             "Date taken", ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL,
             "Camera Make", TiffTagConstants.TIFF_TAG_MAKE,
             "Camera Model", TiffTagConstants.TIFF_TAG_MODEL);
-    private final Map<String, TagInfo> extendedTags = Stream.concat(Map.of(
+    public final static Map<String, TagInfo> extendedTags = Stream.concat(Map.of(
                     "Programm", TiffTagConstants.TIFF_TAG_SOFTWARE,
                     "Width", ExifTagConstants.EXIF_TAG_EXIF_IMAGE_WIDTH,
                     "Length", ExifTagConstants.EXIF_TAG_EXIF_IMAGE_LENGTH).entrySet().stream(),
