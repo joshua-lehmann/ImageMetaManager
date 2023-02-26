@@ -25,6 +25,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
@@ -44,6 +45,7 @@ public class AlbumController {
     public static final String STORAGE_DIRECTORY_JSON = System.getProperty("defaultDir-json", System.getenv("USERPROFILE") + "\\image-meta-manager\\defaultDir.json");
     private static final String FALLBACK_DIR = System.getenv("USERPROFILE");
     private static final String DEFAULT_TITLE = "Invalid Selection";
+    private static final int MAX_IMAGES = 6;
 
     private ImageService imageService;
     private ExifService exifService;
@@ -65,6 +67,9 @@ public class AlbumController {
 
     @FXML
     private Pane imageContainer;
+
+    @FXML
+    private Button addButton;
 
     public void setAlbum(Album album) {
         this.album = album;
@@ -270,6 +275,12 @@ public class AlbumController {
         imageGrid.getChildren().clear();
 
         List<Image> images = imageService.getImagesForAlbum(album);
+
+        if (images.size() < MAX_IMAGES) {
+            addButton.setDisable(false);
+        } else {
+            addButton.setDisable(true);
+        }
 
         int col = 0;
         int row = 0;
