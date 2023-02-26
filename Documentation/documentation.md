@@ -1,9 +1,32 @@
 # Dokumentation
+
 Diese Dokumentation erläutert den Image Meta Manager gemäss der Aufgabenstellung für das OOP2-Abschlussprojekt.
 
-Die Applikation Image Meta Manager dient dazu Bilder und deren Metadaten zu verwalten. 
+Die Applikation Image Meta Manager dient dazu Bilder und deren Metadaten zu verwalten.
+
+<!-- TOC -->
+
+* [Dokumentation](#dokumentation)
+  * [Benutzung/Bedienung](#benutzungbedienung)
+    * [Bibliothek-View](#bibliothek-view)
+    * [Album-View](#album-view)
+    * [Image-View](#image-view)
+  * [Umsetzung](#umsetzung)
+    * [Git](#git)
+    * [Unit-Tests](#unit-tests)
+    * [Enums](#enums)
+    * [Casting](#casting)
+    * [Interfaces](#interfaces)
+    * [Generics](#generics)
+    * [Collections](#collections)
+    * [Serialisierung](#serialisierung)
+    * [Exceptions](#exceptions)
+    * [Maven Build-Prozess](#maven-build-prozess)
+
+<!-- TOC -->
 
 ## Benutzung/Bedienung
+
 Nach dem Starten der Applikation werden, falls noch keine Alben vorhanden sind, zwei Beispielalben mit Beispielbildern
 erstellt.
 Damit die Daten persistieren, werden die Daten in JSON-Dateien unter folgenden Pfad: \<Benutzerprofil>
@@ -75,6 +98,14 @@ Nachfolgend ist grob die Reihenfolge der Umsetzung aufgelistet:
   implementiert.
 
 - Erstellen des ExifService, welcher Metadaten aus den Bildern ausliest.
+
+### Git
+
+Wir haben git verwendet, um die Entwicklung zu versionieren. Alle Commits sind auf Github zu finden. Auch haben wir
+immer Feature-Branches verwendet, um die Entwicklung zu vereinfachen und um die einzelnen Features zu trennen.
+Für jeden Feature Branch wurde ein Pull Request erstellt, welcher von dem jeweils anderen Teammitglied überprüft wurde.
+So konnten wir sicherstellen, dass die Änderungen funktionieren und keine Konflikte mit anderen Features entstehen.
+Ausserdem konnten wir so beide unsere Coding Skills gegenseitig verbessern.
 
 ### Unit-Tests
 
