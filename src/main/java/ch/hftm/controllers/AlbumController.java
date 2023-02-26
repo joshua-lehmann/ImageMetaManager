@@ -270,17 +270,18 @@ public class AlbumController {
         timeline.setOnFinished(e -> albumStatus.setVisible(false));
     }
 
+    private boolean isAlbumFull(List<Image> images) {
+        return images.size() > MAX_IMAGES;
+    }
+
     public void initializeAlbum() {
         // Clear the imageGrid of all children nodes
         imageGrid.getChildren().clear();
 
         List<Image> images = imageService.getImagesForAlbum(album);
 
-        if (images.size() < MAX_IMAGES) {
-            addButton.setDisable(false);
-        } else {
-            addButton.setDisable(true);
-        }
+        addButton.setDisable(false);
+        if (isAlbumFull(images)) addButton.setDisable(true);
 
         int col = 0;
         int row = 0;
