@@ -3,16 +3,23 @@ package ch.hftm.service;
 import ch.hftm.data.Image;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.imaging.ImageReadException;
+import org.apache.commons.imaging.ImageWriteException;
 import org.apache.commons.imaging.Imaging;
 import org.apache.commons.imaging.common.ImageMetadata;
 import org.apache.commons.imaging.formats.jpeg.JpegImageMetadata;
+import org.apache.commons.imaging.formats.jpeg.exif.ExifRewriter;
 import org.apache.commons.imaging.formats.tiff.TiffField;
+import org.apache.commons.imaging.formats.tiff.TiffImageMetadata;
 import org.apache.commons.imaging.formats.tiff.constants.ExifTagConstants;
 import org.apache.commons.imaging.formats.tiff.constants.TiffTagConstants;
 import org.apache.commons.imaging.formats.tiff.taginfos.TagInfo;
+import org.apache.commons.imaging.formats.tiff.taginfos.TagInfoAscii;
+import org.apache.commons.imaging.formats.tiff.taginfos.TagInfoShort;
+import org.apache.commons.imaging.formats.tiff.write.TiffOutputDirectory;
+import org.apache.commons.imaging.formats.tiff.write.TiffOutputSet;
+import org.apache.commons.io.FileUtils;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -32,7 +39,7 @@ public class ExifService {
             tags.entrySet().stream()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
 
-    public Object getExifTag(Image image, TagInfo tagInfo) {
+    private Object getExifTag(Image image, TagInfo tagInfo) {
         try {
             File imageFile = new File(image.getFullPath());
             final ImageMetadata metadata = Imaging.getMetadata(imageFile);
@@ -46,7 +53,7 @@ public class ExifService {
         return null;
     }
 
-    public Map<String, Object> getTags(Image image, Boolean extended) {
+    public Map<String, Object> getExifTags(Image image, Boolean extended) {
         Map<String, Object> exifData = new HashMap<>();
         // loop over all tags
         for (Map.Entry<String, TagInfo> entry : Boolean.TRUE.equals(extended) ? extendedTags.entrySet() : tags.entrySet()) {
@@ -58,6 +65,44 @@ public class ExifService {
             }
         }
         return exifData;
+    }
+
+    public <T extends TagInfo> void updateExifTag(Image image, File destination, T tag, Object value) {
+        try (FileOutputStream fos = new FileOutputStream(destination); OutputStream os = new BufferedOutputStream(fos)) {
+            File imageFile = new File(image.getFullPath());
+            final ImageMetadata metadata = Imaging.getMetadata(imageFile);
+            TiffOutputSet outputSet = null;
+            if (metadata instanceof JpegImageMetadata jpegMetadata) {
+                final TiffImageMetadata exif = jpegMetadata.getExif();
+                if (null != exif) {
+                    // if we have existing EXIF metadata, we can want to get a copy which we can modify.
+                    outputSet = exif.getOutputSet();
+                } else {
+                    // if we don't have existing EXIF metadata, we create an empty set of EXIF metadata.
+                    outputSet = new TiffOutputSet();
+                }
+
+                final TiffOutputDirectory exifDirectory = outputSet.getOrCreateExifDirectory();
+                // make sure to remove old value if present (this method will not fail if the tag does not exist).
+                exifDirectory.removeField(tag);
+
+                if (tag instanceof TagInfoAscii)
+                    exifDirectory.add((TagInfoAscii) tag, value.toString());
+                else if (tag instanceof TagInfoShort)
+                    exifDirectory.add((TagInfoShort) tag, Short.valueOf(value.toString()));
+
+                new ExifRewriter().updateExifMetadataLossless(imageFile, os,
+                        outputSet);
+                // Somehow overwriting the original file with new tags does not work, so we copy the new file to the original file
+                FileUtils.delete(imageFile);
+                FileUtils.copyFile(destination, imageFile, true);
+                FileUtils.delete(destination);
+            }
+
+        } catch (NullPointerException | ImageReadException | IOException | ImageWriteException e) {
+            log.error("Could not read exif data from image {}: {}", image.getFullPath(), e.getMessage());
+        }
+
     }
 
 
