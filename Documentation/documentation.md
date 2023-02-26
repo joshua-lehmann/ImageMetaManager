@@ -36,3 +36,41 @@ Im Edit-View wird das Bild grösser dargestellt und es werden die folgenden Exif
 - ExifImageLength: Die Bildhöhe in Pixel.
 
 Über den `Album`-Button kommt man zurück in das Album.
+
+## Umsetzung
+Nachfolgend ist grob die Reihenfolge der Umsetzung aufgelistet:
+- Erstellen der Album- und Image-Klasse und die dazugehörigen Services AlbumService und ImageService. 
+Die beiden Services implementieren die Logik um die jeweilge Klasse zu verwalten und schreiben wichtige Daten in JSON, damit diese persistieren.
+
+- Erstellen des SceneController, welcher verwendet wird, um zwischen verschiedenen Scenes/Views hin und herzuwechseln.
+
+- Erstellen des LibraryController, welcher die Bibliothek-View - Anzeige aller vorhanden Alben - implementiert.
+
+- Erstellen des AlbumController, welcher die Album-View - Anzeige alle vorhandenen Bilder eines Albums - implementiert.
+
+- Erstellen des ImageController, welcher die Edit-View - detaillierte Anzeige der Metadaten eines Bilds - implementiert.
+
+- Erstellen des ExifService, welcher Metadaten aus den Bildern ausliest.
+
+### Unit-Tests
+Für jeden Service gibt es einge dazugehörige Testklasse, welche die Methoden des jeweiligen Services überprüft. Wir haben dabei eine Code Coverage von min. 80 Prozent für alle Services angestrebt.  
+Die Code Coverage sowie Code Smells und Sicherheitsprobleme werden dabei von SonarCloud überprüft.
+
+### Enums
+Wir haben keine eigene Enums erstellt, verwendet jedoch Enums von anderen Paketen. Beispielsweise im ExifService um die relevaten Exif- und Tiff-Tags auszulesen, in den Controllern um den AlertType festzulegen oder im ImageController um die horizontale Ausrichtung zu definieren.
+
+### Casting
+Im SceneController casten wir bspw. das Window der momentanen Scene in eine Stage, um anschliessend die Scene zu wechseln.  
+Auch casten wir in den Controllen diverse JavaFX-Klassen, damit wir die richtigen Typen verwenden.
+
+### Interfaces
+
+### Generics
+
+### Collections
+
+### Serialisierung
+
+### Exceptions
+
+### Maven Build-Prozess
