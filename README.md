@@ -5,3 +5,6 @@ Der Image Meta Manger soll ein Tool sein, welches es erlaubt Metadaten von Bildd
 
 ## Dokumentation
 Die Dokumentation des Projekts ist [hier](./Documentation/documentation.md) ersichtlich.
+
+## Release und Dateien
+Die finalen Dateien können im Release heruntergeladen werden: https://github.com/joshua-lehmann/ImageMetaManager/releases/tag/1.0.0
