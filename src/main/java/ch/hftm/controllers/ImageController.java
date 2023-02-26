@@ -2,6 +2,7 @@ package ch.hftm.controllers;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 import ch.hftm.data.Image;
 import ch.hftm.service.AlbumService;
@@ -18,8 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ImageController {
     
-    private static final int ATTR_AMOUNT = 5; // Used to test dynamic attribute and value adding to imageMetaPane
-
     private ExifService exifService;
     private Image image;
 
@@ -65,22 +64,26 @@ public class ImageController {
         imageMetaPane.getColumnConstraints().add(col1);
         imageMetaPane.getColumnConstraints().add(col2);
 
-        imageMetaPane.add(new Label("Image Name:"), 0, 0);
-        imageMetaPane.add(new Label(image.getFileName()), 1, 0);
+        int row = 0;
+        createLabel(imageMetaPane, 0, row, "Image Name:");
+        createLabel(imageMetaPane, 1, row++, image.getFileName());
 
-        createLabel(imageMetaPane, 0, "Attribute");
-        createLabel(imageMetaPane, 1, "Value");
+        Map<String, Object> imageTags = exifService.getTags(image, true);
+
+        
+        for (Map.Entry<String, Object> entry : imageTags.entrySet()) {
+            createLabel(imageMetaPane, 0, row, entry.getKey());
+            createLabel(imageMetaPane, 1, row++, entry.getValue().toString());
+        }
 
         metaBorderPane.setCenter(imageMetaPane);
     }
 
-    private void createLabel(GridPane pane, int column, String labelText) {
-        for (int i = 1; i < ATTR_AMOUNT; i++) {
-            Label label = new Label();
-            label.setText(String.format("%s %d:", labelText, i));
-            label.setVisible(true);
-            pane.add(label, column, i);
-        }
+    private void createLabel(GridPane pane, int column, int row, String labelText) {
+        Label label = new Label();
+        label.setText(labelText);
+        label.setVisible(true);
+        pane.add(label, column, row);
     }
 
     @FXML
