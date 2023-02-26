@@ -12,7 +12,8 @@ Damit die Daten persistieren, werden die Daten in JSON-Dateien unter folgenden P
 ### Bibliothek-View
 
 Die Startseite ist die Bibliothek wo alle vorhanden Alben ersichtlich sind.  
-In der Bibliothek können neue Alben erstellt werden, indem ein Albumtitel und eine -beschreibung vergeben werden. Auch können vorhande Alben bearbeitet werden.  
+In der Bibliothek können neue Alben erstellt werden, indem ein Albumtitel und eine -beschreibung vergeben werden. Auch
+können vorhanden Alben bearbeitet werden.  
 Die Bibliothek kann max. 20 Alben enthalten.
 Durch Klicken auf ein Album wechselt man zum Album-View.
 ![Library View](./images/library-view.JPG)
@@ -89,7 +90,8 @@ die horizontale Ausrichtung zu definieren.
 
 ### Casting
 
-Im SceneController casten wir bspw. das Window der momentanen Scene in eine Stage, um anschliessend die Scene zu
+Im SceneController casten wir beispielsweise das Window der momentanen Scene in eine Stage, um anschliessend die Scene
+zu
 wechseln.  
 Auch casten wir in den Controllern diverse JavaFX-Klassen, damit wir die richtigen Typen verwenden, wenn wir die
 jeweilige View über den SceneController initialisieren.
