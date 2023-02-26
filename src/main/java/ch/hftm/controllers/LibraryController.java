@@ -22,6 +22,7 @@ import java.util.ResourceBundle;
 
 public class LibraryController implements Initializable {
 
+    private static final int MAX_ALBUMS = 20;
     static final int ITEMS_PER_ROW = 4;
 
     @FXML
@@ -67,8 +68,14 @@ public class LibraryController implements Initializable {
         createAlbumButton.setDisable(true);
     }
 
+    private boolean isLibraryFull() {
+        AlbumService albumService = new AlbumService();
+        List<Album> albums = albumService.getAllAlbums();
+        return albums.size() >= MAX_ALBUMS;
+    }
+
     private boolean canCreateAlbum() {
-        return checkRequiredField(newAlbumTitle) && checkRequiredField(newAlbumDescription);
+        return checkRequiredField(newAlbumTitle) && checkRequiredField(newAlbumDescription) && !isLibraryFull();
     }
 
     private boolean checkRequiredField(TextInputControl field) {
