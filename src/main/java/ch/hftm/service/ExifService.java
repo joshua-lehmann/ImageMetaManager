@@ -67,11 +67,12 @@ public class ExifService {
         return exifData;
     }
 
-    public <T extends TagInfo> void updateExifTag(Image image, File destination, T tag, Object value) {
-        try (FileOutputStream fos = new FileOutputStream(destination); OutputStream os = new BufferedOutputStream(fos)) {
+    public <T extends TagInfo> void updateExifTag(Image image, T tag, Object value) {
+        File tempFile = new File(image.getFullPath() + ".tmp");
+        try (FileOutputStream fos = new FileOutputStream(tempFile); OutputStream os = new BufferedOutputStream(fos)) {
             File imageFile = new File(image.getFullPath());
             final ImageMetadata metadata = Imaging.getMetadata(imageFile);
-            TiffOutputSet outputSet = null;
+            TiffOutputSet outputSet;
             if (metadata instanceof JpegImageMetadata jpegMetadata) {
                 final TiffImageMetadata exif = jpegMetadata.getExif();
                 if (null != exif) {
@@ -86,17 +87,15 @@ public class ExifService {
                 // make sure to remove old value if present (this method will not fail if the tag does not exist).
                 exifDirectory.removeField(tag);
 
-                if (tag instanceof TagInfoAscii)
-                    exifDirectory.add((TagInfoAscii) tag, value.toString());
-                else if (tag instanceof TagInfoShort)
-                    exifDirectory.add((TagInfoShort) tag, Short.valueOf(value.toString()));
+                if (tag instanceof TagInfoAscii asciiTag) exifDirectory.add(asciiTag, value.toString());
+                else if (tag instanceof TagInfoShort shortTag)
+                    exifDirectory.add(shortTag, Short.parseShort(value.toString()));
 
-                new ExifRewriter().updateExifMetadataLossless(imageFile, os,
-                        outputSet);
+                new ExifRewriter().updateExifMetadataLossless(imageFile, os, outputSet);
                 // Somehow overwriting the original file with new tags does not work, so we copy the new file to the original file
                 FileUtils.delete(imageFile);
-                FileUtils.copyFile(destination, imageFile, true);
-                FileUtils.delete(destination);
+                FileUtils.copyFile(tempFile, imageFile, true);
+                FileUtils.delete(tempFile);
             }
 
         } catch (NullPointerException | ImageReadException | IOException | ImageWriteException e) {
