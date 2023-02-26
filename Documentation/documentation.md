@@ -43,6 +43,7 @@ Im Image-View wird das Bild grösser dargestellt und es werden die folgenden Exi
 - ExifImageWidth: Die Bildbreite in Pixel.
 - ExifImageLength: Die Bildhöhe in Pixel.
 
+Über den `Edit Tags`-Button kann man die Metadaten eines Bilds bearbeiten.
 Über den `Album`-Button kommt man zurück in das Album.
 ![Image View](./images/image-view.JPG)
 
