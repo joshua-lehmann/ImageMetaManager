@@ -82,6 +82,8 @@ Im Image-View wird das Bild grösser dargestellt und es werden die folgenden Exi
 
 ## Umsetzung
 
+Zuerst haben wir die Requirements anhand von [Use Cases](https://github.com/joshua-lehmann/ImageMetaManager/blob/main/Documentation/UseCase.md) definiert und zusätzlich noch [GUI-Mockups erstellt](https://github.com/joshua-lehmann/ImageMetaManager/blob/main/Documentation/gui.md).
+
 Nachfolgend ist grob die Reihenfolge der Umsetzung aufgelistet:
 
 - Erstellen der Album- und Image-Klasse und die dazugehörigen Services AlbumService und ImageService.
